@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surefire Aggregated Unit Test Report - AI JUG Saxony</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #f8fafc; --card-bg: #ffffff; --card-border: #e2e8f0; --text: #0f172a; --text-muted: #64748b; --primary: #0284c7; --success: #16a34a; --warning: #d97706; --error: #dc2626; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 2rem 1.5rem; }
+        .container { max-width: 1480px; margin: 0 auto; }
+        .header { border-bottom: 1px solid var(--card-border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; }
+        .header h1 { margin: 0; font-size: 2.1rem; font-weight: 800; background: linear-gradient(135deg, #0f172a 0%, #0284c7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { margin: 0.5rem 0 0 0; color: var(--text-muted); font-size: 1.05rem; }
+        .action-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: #334155; padding: 0.55rem 1.1rem; border-radius: 8px; text-decoration: none; font-size: 0.875rem; font-weight: 600; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .action-btn:hover { background: #f8fafc; border-color: var(--primary); color: var(--primary); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.25rem; margin-bottom: 2.25rem; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 1.25rem; text-align: center; }
+        .stat-value { font-size: 1.9rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin: 0.25rem 0; }
+        .stat-sub { font-size: 0.8rem; color: var(--text-muted); }
+        .stat-label { color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 1.75rem; margin-bottom: 2.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .section-header { margin-bottom: 1.25rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
+        .section-header h2 { margin: 0; font-size: 1.45rem; font-weight: 700; color: #0f172a; }
+        .section-desc { color: var(--text-muted); font-size: 0.95rem; margin: 0.25rem 0 0 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid var(--card-border); }
+        th { background: #f8fafc; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+        tr:hover td { background: #f8fafc; }
+        .badge { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+        .badge-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .badge-info { background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd; }
+        .badge-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .numeric { text-align: right; font-variant-numeric: tabular-nums; font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>🧪 Surefire Test Execution Report</h1>
+            <p>Aggregated test execution results, execution timings, and failure diagnostics for LRUClockMap across all subprojects.</p>
+        </div>
+        <div>
+            <a href="index.html" class="action-btn">← Back to Dashboard</a>
+        </div>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Tests Executed</div>
+            <div class="stat-value" style="color: var(--primary);">505</div>
+            <div class="stat-sub">Duration: 10.27s</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Tests Passed</div>
+            <div class="stat-value" style="color: var(--success);">486</div>
+            <div class="stat-sub">96.2% Pass Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Failures & Errors</div>
+            <div class="stat-value" style="color: var(--error);">19</div>
+            <div class="stat-sub">Requires attention</div>
+        </div>
+    </div>
+    <div id="lruclockmap" class="card">
+        <div class="section-header">
+            <h2>⏰ LRUClockMap — Bounded Cache Unit Test Suites</h2>
+            <div class="section-desc">Execution results for LRUClockMapTest (eviction, capacity bounds, concurrent operations) across demo0 through demo9.</div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Module</th>
+                    <th>AI Model / Implementation</th>
+                    <th>Tests</th>
+                    <th class="numeric">Duration</th>
+                    <th class="numeric">Failures</th>
+                    <th class="numeric">Errors</th>
+                    <th>Status</th>
+                    <th>Diagnostics / Test Results</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="demo0">
+                    <td><strong>demo0</strong></td>
+                    <td>Human Baseline</td>
+                    <td><strong>37</strong></td>
+                    <td class="numeric">0.72s</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-success">100% Passed ✅</span></td>
+                    <td><span style="color: #16a34a; font-size: 0.85rem;">All test cases passed cleanly.</span></td>
+                </tr>
+                <tr id="demo1">
+                    <td><strong>demo1</strong></td>
+                    <td>Gemini 3.7 Flash High (Antigravity)</td>
+                    <td><strong>52</strong></td>
+                    <td class="numeric">0.94s</td>
+                    <td class="numeric" style="color: #dc2626;">1</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-warning">1 FAILED ❌</span></td>
+                    <td>
+                        <details style="margin-top: 0.25rem;"><summary style="cursor: pointer; color: #dc2626; font-size: 0.85rem; font-weight: 600;">Show 1 Failure Details</summary>
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 0.5rem; margin-top: 0.4rem; font-size: 0.8rem; font-family: monospace;">
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo1.LRUClockMapTest$NullContractTests.testPutNullValueThrowsNPE</code> &mdash; Expected java.lang.NullPointerException to be thrown, but nothing was thrown.</div>
+                        </div>
+                        </details>
+                    </td>
+                </tr>
+                <tr id="demo2">
+                    <td><strong>demo2</strong></td>
+                    <td>Kimi K3 (Kilo Code)</td>
+                    <td><strong>52</strong></td>
+                    <td class="numeric">1.49s</td>
+                    <td class="numeric" style="color: #dc2626;">2</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-warning">2 FAILED ❌</span></td>
+                    <td>
+                        <details style="margin-top: 0.25rem;"><summary style="cursor: pointer; color: #dc2626; font-size: 0.85rem; font-weight: 600;">Show 2 Failure Details</summary>
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 0.5rem; margin-top: 0.4rem; font-size: 0.8rem; font-family: monospace;">
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo2.LRUClockMapTest$NullHandlingTests.rejectedNullCallsDoNotCorruptTheMap</code> &mdash; Expected java.lang.RuntimeException to be thrown, but nothing was thrown.</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo2.LRUClockMapTest$NullHandlingTests.nullValuesAreRejected</code> &mdash; put(k, null) must be rejected (no null value support) ==&amp;gt; Expected java.lang.RuntimeException to be thrown, but nothing was thrown.</div>
+                        </div>
+                        </details>
+                    </td>
+                </tr>
+                <tr id="demo3">
+                    <td><strong>demo3</strong></td>
+                    <td>OpenAI 5.6 Sol Max (Kilo Code)</td>
+                    <td><strong>15</strong></td>
+                    <td class="numeric">0.19s</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-success">100% Passed ✅</span></td>
+                    <td><span style="color: #16a34a; font-size: 0.85rem;">All test cases passed cleanly.</span></td>
+                </tr>
+                <tr id="demo4">
+                    <td><strong>demo4</strong></td>
+                    <td>Gemma 4 31B Thinking (Kilo Code)</td>
+                    <td><strong>15</strong></td>
+                    <td class="numeric">0.59s</td>
+                    <td class="numeric" style="color: #dc2626;">6</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-warning">6 FAILED ❌</span></td>
+                    <td>
+                        <details style="margin-top: 0.25rem;"><summary style="cursor: pointer; color: #dc2626; font-size: 0.85rem; font-weight: 600;">Show 6 Failure Details</summary>
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 0.5rem; margin-top: 0.4rem; font-size: 0.8rem; font-family: monospace;">
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo4.LRUClockMapTest$Constraints.minMaxSize(int)[1]</code> &mdash; Unexpected exception type thrown, expected: &amp;lt;java.lang.IllegalArgumentException&amp;gt; but was: &amp;lt;java.lang.RuntimeException&amp;gt;</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo4.LRUClockMapTest$Constraints.minMaxSize(int)[2]</code> &mdash; Unexpected exception type thrown, expected: &amp;lt;java.lang.IllegalArgumentException&amp;gt; but was: &amp;lt;java.lang.RuntimeException&amp;gt;</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo4.LRUClockMapTest$Constraints.minMaxSize(int)[3]</code> &mdash; Unexpected exception type thrown, expected: &amp;lt;java.lang.IllegalArgumentException&amp;gt; but was: &amp;lt;java.lang.RuntimeException&amp;gt;</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo4.LRUClockMapTest$Constraints.minMaxSize(int)[4]</code> &mdash; Unexpected exception type thrown, expected: &amp;lt;java.lang.IllegalArgumentException&amp;gt; but was: &amp;lt;java.lang.RuntimeException&amp;gt;</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo4.LRUClockMapTest$Constraints.nullValue</code> &mdash; Expected java.lang.Exception to be thrown, but nothing was thrown.</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo4.LRUClockMapTest$Eviction.getRawNoSecondChance</code> &mdash; k0 should have been evicted as getRaw does not set second chance ==&amp;gt; expected: &amp;lt;null&amp;gt; but was: &amp;lt;0&amp;gt;</div>
+                        </div>
+                        </details>
+                    </td>
+                </tr>
+                <tr id="demo5">
+                    <td><strong>demo5</strong></td>
+                    <td>Deepseek V4 Flash Max (Kilo Code)</td>
+                    <td><strong>44</strong></td>
+                    <td class="numeric">0.78s</td>
+                    <td class="numeric" style="color: #dc2626;">2</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-warning">2 FAILED ❌</span></td>
+                    <td>
+                        <details style="margin-top: 0.25rem;"><summary style="cursor: pointer; color: #dc2626; font-size: 0.85rem; font-weight: 600;">Show 2 Failure Details</summary>
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 0.5rem; margin-top: 0.4rem; font-size: 0.8rem; font-family: monospace;">
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo5.LRUClockMapTest$NullArguments.nullValuesAreRejected</code> &mdash; Expected java.lang.NullPointerException to be thrown, but nothing was thrown.</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.MultipleFailuresError</span>: <code>org.jugsaxony.clock.demo5.LRUClockMapTest$SecondChance.readKeyGetsASecondChance</code> &mdash; Multiple Failures (2 failures) 	org.opentest4j.AssertionFailedError: the recently read key must get a second chance ==&amp;gt; expected: not &amp;lt;null&amp;gt; 	org.opentest4j.AssertionFailedError: exactly one untouched key should have been evicted ==&amp;gt; expected: &amp;lt;1&amp;gt; but was: &amp;lt;0&amp;gt;</div>
+                        </div>
+                        </details>
+                    </td>
+                </tr>
+                <tr id="demo6">
+                    <td><strong>demo6</strong></td>
+                    <td>Claude Opus 5 Ultra (Claude)</td>
+                    <td><strong>130</strong></td>
+                    <td class="numeric">2.73s</td>
+                    <td class="numeric" style="color: #dc2626;">2</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-warning">2 FAILED ❌</span></td>
+                    <td>
+                        <details style="margin-top: 0.25rem;"><summary style="cursor: pointer; color: #dc2626; font-size: 0.85rem; font-weight: 600;">Show 2 Failure Details</summary>
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 0.5rem; margin-top: 0.4rem; font-size: 0.8rem; font-family: monospace;">
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo6.LRUClockMapTest$NullHandling.nullValueIsRejected</code> &mdash; Expected java.lang.NullPointerException to be thrown, but nothing was thrown.</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo6.LRUClockMapTest$NullHandling.rejectedPutKeepsTheOldValue</code> &mdash; Expected java.lang.NullPointerException to be thrown, but nothing was thrown.</div>
+                        </div>
+                        </details>
+                    </td>
+                </tr>
+                <tr id="demo7">
+                    <td><strong>demo7</strong></td>
+                    <td>Qwen 38 max XHigh (Kilo Code)</td>
+                    <td><strong>72</strong></td>
+                    <td class="numeric">1.02s</td>
+                    <td class="numeric" style="color: #dc2626;">4</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-warning">4 FAILED ❌</span></td>
+                    <td>
+                        <details style="margin-top: 0.25rem;"><summary style="cursor: pointer; color: #dc2626; font-size: 0.85rem; font-weight: 600;">Show 4 Failure Details</summary>
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 0.5rem; margin-top: 0.4rem; font-size: 0.8rem; font-family: monospace;">
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo7.LRUClockMapTest$EvictionTests.secondChanceProtectsHotKey(int)[1]</code> &mdash; hot key must be present before insert 5 ==&amp;gt; expected: not &amp;lt;null&amp;gt;</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo7.LRUClockMapTest$EvictionTests.secondChanceProtectsHotKey(int)[2]</code> &mdash; hot key must be present before insert 9 ==&amp;gt; expected: not &amp;lt;null&amp;gt;</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo7.LRUClockMapTest$EvictionTests.secondChanceProtectsHotKey(int)[3]</code> &mdash; hot key must be present before insert 17 ==&amp;gt; expected: not &amp;lt;null&amp;gt;</div>
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo7.LRUClockMapTest$NullTests.putNullValueRejected</code> &mdash; Expected java.lang.RuntimeException to be thrown, but nothing was thrown.</div>
+                        </div>
+                        </details>
+                    </td>
+                </tr>
+                <tr id="demo8">
+                    <td><strong>demo8</strong></td>
+                    <td>Gemini 3.7 Flash High (Kilo Code)</td>
+                    <td><strong>42</strong></td>
+                    <td class="numeric">1.04s</td>
+                    <td class="numeric" style="color: #dc2626;">1</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-warning">1 FAILED ❌</span></td>
+                    <td>
+                        <details style="margin-top: 0.25rem;"><summary style="cursor: pointer; color: #dc2626; font-size: 0.85rem; font-weight: 600;">Show 1 Failure Details</summary>
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 0.5rem; margin-top: 0.4rem; font-size: 0.8rem; font-family: monospace;">
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo8.LRUClockMapTest$NullHandlingTests.putWithNullValueThrowsException</code> &mdash; Map specifies no support for null values; put(key, null) must throw an exception ==&amp;gt; Expected java.lang.Exception to be thrown, but nothing was thrown.</div>
+                        </div>
+                        </details>
+                    </td>
+                </tr>
+                <tr id="demo9">
+                    <td><strong>demo9</strong></td>
+                    <td>Gemini 3.8 Flash High (Antigravity)</td>
+                    <td><strong>46</strong></td>
+                    <td class="numeric">0.77s</td>
+                    <td class="numeric" style="color: #dc2626;">1</td>
+                    <td class="numeric" style="color: inherit;">0</td>
+                    <td><span class="badge badge-warning">1 FAILED ❌</span></td>
+                    <td>
+                        <details style="margin-top: 0.25rem;"><summary style="cursor: pointer; color: #dc2626; font-size: 0.85rem; font-weight: 600;">Show 1 Failure Details</summary>
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; padding: 0.5rem; margin-top: 0.4rem; font-size: 0.8rem; font-family: monospace;">
+                            <div style="margin-bottom: 0.35rem;"><span style="color: #991b1b; font-weight: bold;">org.opentest4j.AssertionFailedError</span>: <code>org.jugsaxony.clock.demo9.LRUClockMapTest$NullContractTests.putRejectsNullValue</code> &mdash; Expected java.lang.RuntimeException to be thrown, but nothing was thrown.</div>
+                        </div>
+                        </details>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

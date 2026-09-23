@@ -1,0 +1,117 @@
+# ==============================================================================
+# Build & Output Directories
+# ==============================================================================
+target/
+**/target/
+build/
+**/build/
+out/
+**/out/
+bin/
+**/bin/
+
+# Compiled Java Classes & Packages
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+# ==============================================================================
+# Maven
+# ==============================================================================
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/.loadlog/
+
+# ==============================================================================
+# Testing, Coverage & Benchmarking Artifacts
+# ==============================================================================
+# JaCoCo
+jacoco.exec
+**/jacoco.exec
+*.exec
+
+# Surefire / Failsafe dump files
+*.dump
+*.dumpstream
+
+# Pitest Mutation Reports
+pit-reports/
+**/pit-reports/
+!reports/pit-reports/
+!reports/pit-reports/**
+
+# JMH Benchmark Output
+jmh-result.*
+**/jmh-result.*
+!reports/jmh-result*
+!reports/jmh-results*
+
+# ==============================================================================
+# IDEs & Editors
+# ==============================================================================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.project
+.classpath
+.settings/
+.factorypath
+.metadata/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# ==============================================================================
+# Operating System Files
+# ==============================================================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+*.swp
+*.swo
+
+# ==============================================================================
+# AI Assistants / Temporary Scratch
+# ==============================================================================
+.gemini/
+.claude/
+scratch/
+

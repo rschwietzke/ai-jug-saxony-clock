@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jugsaxony.clock</groupId>
+        <artifactId>ai-jug-saxony-clock-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>clock-coverage-report</artifactId>
+    <packaging>jar</packaging>
+
+    <name>clock-coverage-report</name>
+    <description>Aggregated Code Coverage Report across all subprojects</description>
+
+    <dependencies>
+        <!-- Subproject dependencies to include in aggregate coverage -->
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo0</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo1</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo5</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo6</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo7</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jugsaxony.clock</groupId>
+            <artifactId>clock-demo9</artifactId>
+        </dependency>
+
+        <!-- Testing & Layout Dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
