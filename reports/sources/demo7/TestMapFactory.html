@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>demo7 - TestMapFactory.java (Source Code Viewer)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --header-bg: #f8fafc;
+            --border: #e2e8f0;
+            --gutter-bg: #f8fafc;
+            --gutter-num: #94a3b8;
+            --text: #0f172a;
+            --primary: #0284c7;
+            --primary-glow: rgba(2, 132, 199, 0.12);
+            --accent: #7c3aed;
+            --line-highlight: #fef9c3;
+            --line-highlight-border: #eab308;
+            --kw-color: #cf222e;
+            --str-color: #0a3069;
+            --comment-color: #6e7781;
+            --ann-color: #8250df;
+            --num-color: #0550ae;
+            --type-color: #953800;
+        }
+        body.dark-theme {
+            --bg: #0d1117;
+            --header-bg: #161b22;
+            --border: #30363d;
+            --gutter-bg: #161b22;
+            --gutter-num: #6e7681;
+            --text: #e6edf3;
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.15);
+            --accent: #a855f7;
+            --line-highlight: #3b3014;
+            --line-highlight-border: #d29922;
+            --kw-color: #ff7b72;
+            --str-color: #a5d6ff;
+            --comment-color: #8b949e;
+            --ann-color: #d2a8ff;
+            --num-color: #79c0ff;
+            --type-color: #ffa657;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding-top: 60px;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .viewer-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            gap: 1rem;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .module-badge {
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+        }
+        .model-badge {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.82rem;
+            font-weight: 500;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+        }
+        .file-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .file-meta {
+            font-size: 0.8rem;
+            color: var(--gutter-num);
+        }
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-select {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+        .nav-select:focus {
+            border-color: var(--primary);
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.15s ease;
+        }
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .code-container {
+            width: 100%;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+        .code-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+        .code-row {
+            transition: background 0.1s ease;
+        }
+        .code-row:hover {
+            background-color: var(--header-bg);
+        }
+        .code-row.highlighted {
+            background-color: var(--line-highlight) !important;
+        }
+        .code-row.highlighted td.line-num {
+            border-left: 4px solid var(--line-highlight-border);
+            color: var(--text);
+            font-weight: 700;
+        }
+        td.line-num {
+            width: 1%;
+            min-width: 3.5rem;
+            padding: 0 1rem 0 0.75rem;
+            text-align: right;
+            vertical-align: top;
+            color: var(--gutter-num);
+            user-select: none;
+            border-right: 1px solid var(--border);
+            background-color: var(--gutter-bg);
+        }
+        td.line-num a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+        td.line-num a:hover {
+            color: var(--primary);
+        }
+        td.line-code {
+            padding: 0 1.25rem;
+            vertical-align: top;
+            white-space: pre;
+        }
+        .kw { color: var(--kw-color); font-weight: 700; }
+        .lit { color: var(--kw-color); font-weight: 700; }
+        .str { color: var(--str-color); }
+        .comment { color: var(--comment-color); font-style: italic; }
+        .ann { color: var(--ann-color); font-weight: 600; }
+        .num { color: var(--num-color); }
+        .type { color: var(--type-color); }
+    </style>
+</head>
+<body>
+    <header class="viewer-header">
+        <div class="header-left">
+            <a href="../../index.html" class="back-btn" onclick="if (document.referrer && document.referrer.includes('reports')) { history.back(); return false; }">← Back</a>
+            <span class="module-badge">demo7</span>
+            <span class="model-badge">Qwen 38 max XHigh (Kilo Code)</span>
+            <span class="file-title">TestMapFactory.java</span>
+            <span class="file-meta">234 lines • 7.9 KB</span>
+        </div>
+        <div class="header-center">
+            <select class="nav-select" title="Switch File in demo7" onchange="window.location.href=this.value;">
+                <option value="TestMapFactory.html" selected>TestMapFactory.java</option>
+                <option value="LRUClockMap.html">LRUClockMap.java</option>
+                <option value="LRUClockMapTest.html">LRUClockMapTest.java</option>
+                <option value="LRUClockMapInterface.html">LRUClockMapInterface.java</option>
+            </select>
+            <select class="nav-select" title="Switch Module for TestMapFactory.java" onchange="window.location.href=this.value;">
+                <option value="../demo0/TestMapFactory.html">demo0</option>
+                <option value="../demo1/TestMapFactory.html">demo1</option>
+                <option value="../demo2/TestMapFactory.html">demo2</option>
+                <option value="../demo3/TestMapFactory.html">demo3</option>
+                <option value="../demo4/TestMapFactory.html">demo4</option>
+                <option value="../demo5/TestMapFactory.html">demo5</option>
+                <option value="../demo6/TestMapFactory.html">demo6</option>
+                <option value="../demo7/TestMapFactory.html" selected>demo7</option>
+                <option value="../demo8/TestMapFactory.html">demo8</option>
+                <option value="../demo9/TestMapFactory.html">demo9</option>
+            </select>
+        </div>
+        <div class="header-right">
+            <button class="action-btn" id="copyBtn" onclick="copyCode()">📋 Copy Code</button>
+            <a href="TestMapFactory.java" download="demo7_TestMapFactory.java" class="action-btn">💾 Raw Java</a>
+            <button class="action-btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+        </div>
+    </header>
+    <div class="code-container">
+        <table class="code-table">
+            <tbody>
+                <tr class="code-row" id="L1">
+                    <td class="line-num" data-line="1"><a href="#L1">1</a></td>
+                    <td class="line-code"><code><span class="kw">package</span> org.jugsaxony.clock.demo7;</code></td>
+                </tr>
+                <tr class="code-row" id="L2">
+                    <td class="line-num" data-line="2"><a href="#L2">2</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L3">
+                    <td class="line-num" data-line="3"><a href="#L3">3</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.io.<span class="type">File</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L4">
+                    <td class="line-num" data-line="4"><a href="#L4">4</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.lang.reflect.<span class="type">InvocationTargetException</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L5">
+                    <td class="line-num" data-line="5"><a href="#L5">5</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.lang.reflect.<span class="type">Method</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L6">
+                    <td class="line-num" data-line="6"><a href="#L6">6</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.lang.reflect.<span class="type">Modifier</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L7">
+                    <td class="line-num" data-line="7"><a href="#L7">7</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.net.<span class="type">URL</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L8">
+                    <td class="line-num" data-line="8"><a href="#L8">8</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.util.<span class="type">ArrayList</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L9">
+                    <td class="line-num" data-line="9"><a href="#L9">9</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.util.<span class="type">Enumeration</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L10">
+                    <td class="line-num" data-line="10"><a href="#L10">10</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.util.<span class="type">List</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L11">
+                    <td class="line-num" data-line="11"><a href="#L11">11</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L12">
+                    <td class="line-num" data-line="12"><a href="#L12">12</a></td>
+                    <td class="line-code"><code><span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L13">
+                    <td class="line-num" data-line="13"><a href="#L13">13</a></td>
+                    <td class="line-code"><code><span class="comment"> * Locates and instantiates the {@link LRUClockMap} implementation under test.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L14">
+                    <td class="line-num" data-line="14"><a href="#L14">14</a></td>
+                    <td class="line-code"><code><span class="comment"> *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L15">
+                    <td class="line-num" data-line="15"><a href="#L15">15</a></td>
+                    <td class="line-code"><code><span class="comment"> * &lt;p&gt;Because the tests are written against the interface only and the concrete</span></code></td>
+                </tr>
+                <tr class="code-row" id="L16">
+                    <td class="line-num" data-line="16"><a href="#L16">16</a></td>
+                    <td class="line-code"><code><span class="comment"> * implementation is supplied later, this factory discovers the implementation</span></code></td>
+                </tr>
+                <tr class="code-row" id="L17">
+                    <td class="line-num" data-line="17"><a href="#L17">17</a></td>
+                    <td class="line-code"><code><span class="comment"> * at runtime using reflection. The lookup order is:</span></code></td>
+                </tr>
+                <tr class="code-row" id="L18">
+                    <td class="line-num" data-line="18"><a href="#L18">18</a></td>
+                    <td class="line-code"><code><span class="comment"> *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L19">
+                    <td class="line-num" data-line="19"><a href="#L19">19</a></td>
+                    <td class="line-code"><code><span class="comment"> * &lt;ol&gt;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L20">
+                    <td class="line-num" data-line="20"><a href="#L20">20</a></td>
+                    <td class="line-code"><code><span class="comment"> *   &lt;li&gt;the class named by the system property {@code lruclockmap.impl}&lt;/li&gt;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L21">
+                    <td class="line-num" data-line="21"><a href="#L21">21</a></td>
+                    <td class="line-code"><code><span class="comment"> *   &lt;li&gt;a {@code public static of(int)} factory method on {@link LRUClockMap} itself</span></code></td>
+                </tr>
+                <tr class="code-row" id="L22">
+                    <td class="line-num" data-line="22"><a href="#L22">22</a></td>
+                    <td class="line-code"><code><span class="comment"> *       (the interface publishes this as implementation guidance)&lt;/li&gt;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L23">
+                    <td class="line-num" data-line="23"><a href="#L23">23</a></td>
+                    <td class="line-code"><code><span class="comment"> *   &lt;li&gt;the conventional name {@code org.jugsaxony.clock.demo7.LRUClockMapImpl}&lt;/li&gt;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L24">
+                    <td class="line-num" data-line="24"><a href="#L24">24</a></td>
+                    <td class="line-code"><code><span class="comment"> *   &lt;li&gt;a best-effort scan of the {@code org.jugsaxony.clock.demo7} package on the</span></code></td>
+                </tr>
+                <tr class="code-row" id="L25">
+                    <td class="line-num" data-line="25"><a href="#L25">25</a></td>
+                    <td class="line-code"><code><span class="comment"> *       classpath for a concrete class implementing {@link LRUClockMap} that offers</span></code></td>
+                </tr>
+                <tr class="code-row" id="L26">
+                    <td class="line-num" data-line="26"><a href="#L26">26</a></td>
+                    <td class="line-code"><code><span class="comment"> *       either a {@code static of(int)} method or an {@code (int)} constructor&lt;/li&gt;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L27">
+                    <td class="line-num" data-line="27"><a href="#L27">27</a></td>
+                    <td class="line-code"><code><span class="comment"> * &lt;/ol&gt;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L28">
+                    <td class="line-num" data-line="28"><a href="#L28">28</a></td>
+                    <td class="line-code"><code><span class="comment"> *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L29">
+                    <td class="line-num" data-line="29"><a href="#L29">29</a></td>
+                    <td class="line-code"><code><span class="comment"> * &lt;p&gt;Exceptions thrown by the implementation factory (for example the</span></code></td>
+                </tr>
+                <tr class="code-row" id="L30">
+                    <td class="line-num" data-line="30"><a href="#L30">30</a></td>
+                    <td class="line-code"><code><span class="comment"> * {@link IllegalArgumentException} for a maxSize below 4) are propagated unchanged.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L31">
+                    <td class="line-num" data-line="31"><a href="#L31">31</a></td>
+                    <td class="line-code"><code><span class="comment"> */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L32">
+                    <td class="line-num" data-line="32"><a href="#L32">32</a></td>
+                    <td class="line-code"><code><span class="kw">final</span> <span class="kw">class</span> <span class="type">TestMapFactory</span></code></td>
+                </tr>
+                <tr class="code-row" id="L33">
+                    <td class="line-num" data-line="33"><a href="#L33">33</a></td>
+                    <td class="line-code"><code>{</code></td>
+                </tr>
+                <tr class="code-row" id="L34">
+                    <td class="line-num" data-line="34"><a href="#L34">34</a></td>
+                    <td class="line-code"><code>    <span class="comment">/** System property to explicitly name the implementation class. */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L35">
+                    <td class="line-num" data-line="35"><a href="#L35">35</a></td>
+                    <td class="line-code"><code>    <span class="kw">static</span> <span class="kw">final</span> <span class="type">String</span> <span class="type">IMPL_PROPERTY</span> = <span class="str">&quot;lruclockmap.impl&quot;</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L36">
+                    <td class="line-num" data-line="36"><a href="#L36">36</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L37">
+                    <td class="line-num" data-line="37"><a href="#L37">37</a></td>
+                    <td class="line-code"><code>    <span class="kw">private</span> <span class="kw">static</span> <span class="kw">final</span> <span class="type">String</span> <span class="type">PACKAGE_NAME</span> = <span class="str">&quot;org.jugsaxony.clock.demo7&quot;</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L38">
+                    <td class="line-num" data-line="38"><a href="#L38">38</a></td>
+                    <td class="line-code"><code>    <span class="kw">private</span> <span class="kw">static</span> <span class="kw">final</span> <span class="type">String</span> <span class="type">PACKAGE_PATH</span> = <span class="type">PACKAGE_NAME</span>.replace(<span class="str">&#39;.&#39;</span>, <span class="str">&#39;/&#39;</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L39">
+                    <td class="line-num" data-line="39"><a href="#L39">39</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L40">
+                    <td class="line-num" data-line="40"><a href="#L40">40</a></td>
+                    <td class="line-code"><code>    <span class="kw">private</span> <span class="kw">static</span> <span class="kw">volatile</span> <span class="type">Creator</span> cachedCreator;</code></td>
+                </tr>
+                <tr class="code-row" id="L41">
+                    <td class="line-num" data-line="41"><a href="#L41">41</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L42">
+                    <td class="line-num" data-line="42"><a href="#L42">42</a></td>
+                    <td class="line-code"><code>    <span class="kw">private</span> <span class="type">TestMapFactory</span>()</code></td>
+                </tr>
+                <tr class="code-row" id="L43">
+                    <td class="line-num" data-line="43"><a href="#L43">43</a></td>
+                    <td class="line-code"><code>    {</code></td>
+                </tr>
+                <tr class="code-row" id="L44">
+                    <td class="line-num" data-line="44"><a href="#L44">44</a></td>
+                    <td class="line-code"><code>        <span class="comment">// utility class</span></code></td>
+                </tr>
+                <tr class="code-row" id="L45">
+                    <td class="line-num" data-line="45"><a href="#L45">45</a></td>
+                    <td class="line-code"><code>    }</code></td>
+                </tr>
+                <tr class="code-row" id="L46">
+                    <td class="line-num" data-line="46"><a href="#L46">46</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L47">
+                    <td class="line-num" data-line="47"><a href="#L47">47</a></td>
+                    <td class="line-code"><code>    <span class="ann">@FunctionalInterface</span></code></td>
+                </tr>
+                <tr class="code-row" id="L48">
+                    <td class="line-num" data-line="48"><a href="#L48">48</a></td>
+                    <td class="line-code"><code>    <span class="kw">private</span> <span class="kw">interface</span> <span class="type">Creator</span></code></td>
+                </tr>
+                <tr class="code-row" id="L49">
+                    <td class="line-num" data-line="49"><a href="#L49">49</a></td>
+                    <td class="line-code"><code>    {</code></td>
+                </tr>
+                <tr class="code-row" id="L50">
+                    <td class="line-num" data-line="50"><a href="#L50">50</a></td>
+                    <td class="line-code"><code>        <span class="type">Object</span> create(<span class="kw">int</span> maxSize) <span class="kw">throws</span> <span class="type">Exception</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L51">
+                    <td class="line-num" data-line="51"><a href="#L51">51</a></td>
+                    <td class="line-code"><code>    }</code></td>
+                </tr>
+                <tr class="code-row" id="L52">
+                    <td class="line-num" data-line="52"><a href="#L52">52</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L53">
+                    <td class="line-num" data-line="53"><a href="#L53">53</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L54">
+                    <td class="line-num" data-line="54"><a href="#L54">54</a></td>
+                    <td class="line-code"><code><span class="comment">     * Creates a new map instance from the discovered implementation.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L55">
+                    <td class="line-num" data-line="55"><a href="#L55">55</a></td>
+                    <td class="line-code"><code><span class="comment">     *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L56">
+                    <td class="line-num" data-line="56"><a href="#L56">56</a></td>
+                    <td class="line-code"><code><span class="comment">     * @param maxSize the maximum size of the map</span></code></td>
+                </tr>
+                <tr class="code-row" id="L57">
+                    <td class="line-num" data-line="57"><a href="#L57">57</a></td>
+                    <td class="line-code"><code><span class="comment">     * @return a new LRUClockMap</span></code></td>
+                </tr>
+                <tr class="code-row" id="L58">
+                    <td class="line-num" data-line="58"><a href="#L58">58</a></td>
+                    <td class="line-code"><code><span class="comment">     * @throws IllegalArgumentException if the implementation rejects the maxSize</span></code></td>
+                </tr>
+                <tr class="code-row" id="L59">
+                    <td class="line-num" data-line="59"><a href="#L59">59</a></td>
+                    <td class="line-code"><code><span class="comment">     * @throws IllegalStateException if no implementation can be found</span></code></td>
+                </tr>
+                <tr class="code-row" id="L60">
+                    <td class="line-num" data-line="60"><a href="#L60">60</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L61">
+                    <td class="line-num" data-line="61"><a href="#L61">61</a></td>
+                    <td class="line-code"><code>    <span class="ann">@SuppressWarnings</span>(<span class="str">&quot;unchecked&quot;</span>)</code></td>
+                </tr>
+                <tr class="code-row" id="L62">
+                    <td class="line-num" data-line="62"><a href="#L62">62</a></td>
+                    <td class="line-code"><code>    <span class="kw">static</span> &lt;<span class="type">K</span>, <span class="type">V</span>&gt; <span class="type">LRUClockMap</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt; create(<span class="kw">final</span> <span class="kw">int</span> maxSize)</code></td>
+                </tr>
+                <tr class="code-row" id="L63">
+                    <td class="line-num" data-line="63"><a href="#L63">63</a></td>
+                    <td class="line-code"><code>    {</code></td>
+                </tr>
+                <tr class="code-row" id="L64">
+                    <td class="line-num" data-line="64"><a href="#L64">64</a></td>
+                    <td class="line-code"><code>        <span class="kw">var</span> creator = cachedCreator;</code></td>
+                </tr>
+                <tr class="code-row" id="L65">
+                    <td class="line-num" data-line="65"><a href="#L65">65</a></td>
+                    <td class="line-code"><code>        <span class="kw">if</span> (creator == <span class="lit">null</span>)</code></td>
+                </tr>
+                <tr class="code-row" id="L66">
+                    <td class="line-num" data-line="66"><a href="#L66">66</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L67">
+                    <td class="line-num" data-line="67"><a href="#L67">67</a></td>
+                    <td class="line-code"><code>            creator = resolve();</code></td>
+                </tr>
+                <tr class="code-row" id="L68">
+                    <td class="line-num" data-line="68"><a href="#L68">68</a></td>
+                    <td class="line-code"><code>            cachedCreator = creator;</code></td>
+                </tr>
+                <tr class="code-row" id="L69">
+                    <td class="line-num" data-line="69"><a href="#L69">69</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L70">
+                    <td class="line-num" data-line="70"><a href="#L70">70</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L71">
+                    <td class="line-num" data-line="71"><a href="#L71">71</a></td>
+                    <td class="line-code"><code>        <span class="kw">try</span></code></td>
+                </tr>
+                <tr class="code-row" id="L72">
+                    <td class="line-num" data-line="72"><a href="#L72">72</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L73">
+                    <td class="line-num" data-line="73"><a href="#L73">73</a></td>
+                    <td class="line-code"><code>            <span class="kw">return</span> (<span class="type">LRUClockMap</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) creator.create(maxSize);</code></td>
+                </tr>
+                <tr class="code-row" id="L74">
+                    <td class="line-num" data-line="74"><a href="#L74">74</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L75">
+                    <td class="line-num" data-line="75"><a href="#L75">75</a></td>
+                    <td class="line-code"><code>        <span class="kw">catch</span> (<span class="kw">final</span> <span class="type">InvocationTargetException</span> e)</code></td>
+                </tr>
+                <tr class="code-row" id="L76">
+                    <td class="line-num" data-line="76"><a href="#L76">76</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L77">
+                    <td class="line-num" data-line="77"><a href="#L77">77</a></td>
+                    <td class="line-code"><code>            <span class="comment">// propagate what the implementation threw, e.g. IllegalArgumentException</span></code></td>
+                </tr>
+                <tr class="code-row" id="L78">
+                    <td class="line-num" data-line="78"><a href="#L78">78</a></td>
+                    <td class="line-code"><code>            <span class="kw">switch</span> (e.getCause())</code></td>
+                </tr>
+                <tr class="code-row" id="L79">
+                    <td class="line-num" data-line="79"><a href="#L79">79</a></td>
+                    <td class="line-code"><code>            {</code></td>
+                </tr>
+                <tr class="code-row" id="L80">
+                    <td class="line-num" data-line="80"><a href="#L80">80</a></td>
+                    <td class="line-code"><code>                <span class="kw">case</span> <span class="type">RuntimeException</span> re  -&gt; <span class="kw">throw</span> re;</code></td>
+                </tr>
+                <tr class="code-row" id="L81">
+                    <td class="line-num" data-line="81"><a href="#L81">81</a></td>
+                    <td class="line-code"><code>                <span class="kw">case</span> <span class="type">Error</span> err            -&gt; <span class="kw">throw</span> err;</code></td>
+                </tr>
+                <tr class="code-row" id="L82">
+                    <td class="line-num" data-line="82"><a href="#L82">82</a></td>
+                    <td class="line-code"><code>                <span class="kw">case</span> <span class="type">Throwable</span> t          -&gt; <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalStateException</span>(</code></td>
+                </tr>
+                <tr class="code-row" id="L83">
+                    <td class="line-num" data-line="83"><a href="#L83">83</a></td>
+                    <td class="line-code"><code>                        <span class="str">&quot;LRUClockMap factory failed for maxSize &quot;</span> + maxSize, t);</code></td>
+                </tr>
+                <tr class="code-row" id="L84">
+                    <td class="line-num" data-line="84"><a href="#L84">84</a></td>
+                    <td class="line-code"><code>                <span class="kw">case</span> <span class="lit">null</span>                 -&gt; <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalStateException</span>(</code></td>
+                </tr>
+                <tr class="code-row" id="L85">
+                    <td class="line-num" data-line="85"><a href="#L85">85</a></td>
+                    <td class="line-code"><code>                        <span class="str">&quot;LRUClockMap factory failed for maxSize &quot;</span> + maxSize, e);</code></td>
+                </tr>
+                <tr class="code-row" id="L86">
+                    <td class="line-num" data-line="86"><a href="#L86">86</a></td>
+                    <td class="line-code"><code>            }</code></td>
+                </tr>
+                <tr class="code-row" id="L87">
+                    <td class="line-num" data-line="87"><a href="#L87">87</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L88">
+                    <td class="line-num" data-line="88"><a href="#L88">88</a></td>
+                    <td class="line-code"><code>        <span class="kw">catch</span> (<span class="kw">final</span> <span class="type">RuntimeException</span> e)</code></td>
+                </tr>
+                <tr class="code-row" id="L89">
+                    <td class="line-num" data-line="89"><a href="#L89">89</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L90">
+                    <td class="line-num" data-line="90"><a href="#L90">90</a></td>
+                    <td class="line-code"><code>            <span class="kw">throw</span> e;</code></td>
+                </tr>
+                <tr class="code-row" id="L91">
+                    <td class="line-num" data-line="91"><a href="#L91">91</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L92">
+                    <td class="line-num" data-line="92"><a href="#L92">92</a></td>
+                    <td class="line-code"><code>        <span class="kw">catch</span> (<span class="kw">final</span> <span class="type">Exception</span> e)</code></td>
+                </tr>
+                <tr class="code-row" id="L93">
+                    <td class="line-num" data-line="93"><a href="#L93">93</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L94">
+                    <td class="line-num" data-line="94"><a href="#L94">94</a></td>
+                    <td class="line-code"><code>            <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalStateException</span>(</code></td>
+                </tr>
+                <tr class="code-row" id="L95">
+                    <td class="line-num" data-line="95"><a href="#L95">95</a></td>
+                    <td class="line-code"><code>                    <span class="str">&quot;Could not create LRUClockMap for maxSize &quot;</span> + maxSize, e);</code></td>
+                </tr>
+                <tr class="code-row" id="L96">
+                    <td class="line-num" data-line="96"><a href="#L96">96</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L97">
+                    <td class="line-num" data-line="97"><a href="#L97">97</a></td>
+                    <td class="line-code"><code>    }</code></td>
+                </tr>
+                <tr class="code-row" id="L98">
+                    <td class="line-num" data-line="98"><a href="#L98">98</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L99">
+                    <td class="line-num" data-line="99"><a href="#L99">99</a></td>
+                    <td class="line-code"><code>    <span class="kw">private</span> <span class="kw">static</span> <span class="type">Creator</span> resolve()</code></td>
+                </tr>
+                <tr class="code-row" id="L100">
+                    <td class="line-num" data-line="100"><a href="#L100">100</a></td>
+                    <td class="line-code"><code>    {</code></td>
+                </tr>
+                <tr class="code-row" id="L101">
+                    <td class="line-num" data-line="101"><a href="#L101">101</a></td>
+                    <td class="line-code"><code>        <span class="kw">var</span> candidates = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt;();</code></td>
+                </tr>
+                <tr class="code-row" id="L102">
+                    <td class="line-num" data-line="102"><a href="#L102">102</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L103">
+                    <td class="line-num" data-line="103"><a href="#L103">103</a></td>
+                    <td class="line-code"><code>        <span class="kw">var</span> fromProperty = <span class="type">System</span>.getProperty(<span class="type">IMPL_PROPERTY</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L104">
+                    <td class="line-num" data-line="104"><a href="#L104">104</a></td>
+                    <td class="line-code"><code>        <span class="kw">if</span> (fromProperty != <span class="lit">null</span> &amp;&amp; !fromProperty.isBlank())</code></td>
+                </tr>
+                <tr class="code-row" id="L105">
+                    <td class="line-num" data-line="105"><a href="#L105">105</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L106">
+                    <td class="line-num" data-line="106"><a href="#L106">106</a></td>
+                    <td class="line-code"><code>            candidates.add(fromProperty.trim());</code></td>
+                </tr>
+                <tr class="code-row" id="L107">
+                    <td class="line-num" data-line="107"><a href="#L107">107</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L108">
+                    <td class="line-num" data-line="108"><a href="#L108">108</a></td>
+                    <td class="line-code"><code>        candidates.add(<span class="type">LRUClockMap</span>.<span class="kw">class</span>.getName());</code></td>
+                </tr>
+                <tr class="code-row" id="L109">
+                    <td class="line-num" data-line="109"><a href="#L109">109</a></td>
+                    <td class="line-code"><code>        candidates.add(<span class="type">PACKAGE_NAME</span> + <span class="str">&quot;.LRUClockMapImpl&quot;</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L110">
+                    <td class="line-num" data-line="110"><a href="#L110">110</a></td>
+                    <td class="line-code"><code>        candidates.addAll(scanPackage());</code></td>
+                </tr>
+                <tr class="code-row" id="L111">
+                    <td class="line-num" data-line="111"><a href="#L111">111</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L112">
+                    <td class="line-num" data-line="112"><a href="#L112">112</a></td>
+                    <td class="line-code"><code>        <span class="kw">var</span> problems = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt;();</code></td>
+                </tr>
+                <tr class="code-row" id="L113">
+                    <td class="line-num" data-line="113"><a href="#L113">113</a></td>
+                    <td class="line-code"><code>        <span class="kw">for</span> (<span class="kw">final</span> <span class="kw">var</span> candidate : candidates)</code></td>
+                </tr>
+                <tr class="code-row" id="L114">
+                    <td class="line-num" data-line="114"><a href="#L114">114</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L115">
+                    <td class="line-num" data-line="115"><a href="#L115">115</a></td>
+                    <td class="line-code"><code>            <span class="kw">try</span></code></td>
+                </tr>
+                <tr class="code-row" id="L116">
+                    <td class="line-num" data-line="116"><a href="#L116">116</a></td>
+                    <td class="line-code"><code>            {</code></td>
+                </tr>
+                <tr class="code-row" id="L117">
+                    <td class="line-num" data-line="117"><a href="#L117">117</a></td>
+                    <td class="line-code"><code>                <span class="kw">var</span> type = <span class="type">Class</span>.forName(candidate);</code></td>
+                </tr>
+                <tr class="code-row" id="L118">
+                    <td class="line-num" data-line="118"><a href="#L118">118</a></td>
+                    <td class="line-code"><code>                <span class="kw">var</span> creator = creatorFor(type);</code></td>
+                </tr>
+                <tr class="code-row" id="L119">
+                    <td class="line-num" data-line="119"><a href="#L119">119</a></td>
+                    <td class="line-code"><code>                <span class="kw">if</span> (creator != <span class="lit">null</span>)</code></td>
+                </tr>
+                <tr class="code-row" id="L120">
+                    <td class="line-num" data-line="120"><a href="#L120">120</a></td>
+                    <td class="line-code"><code>                {</code></td>
+                </tr>
+                <tr class="code-row" id="L121">
+                    <td class="line-num" data-line="121"><a href="#L121">121</a></td>
+                    <td class="line-code"><code>                    <span class="kw">return</span> creator;</code></td>
+                </tr>
+                <tr class="code-row" id="L122">
+                    <td class="line-num" data-line="122"><a href="#L122">122</a></td>
+                    <td class="line-code"><code>                }</code></td>
+                </tr>
+                <tr class="code-row" id="L123">
+                    <td class="line-num" data-line="123"><a href="#L123">123</a></td>
+                    <td class="line-code"><code>                problems.add(candidate + <span class="str">&quot;: no usable static of(int) or (int) constructor&quot;</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L124">
+                    <td class="line-num" data-line="124"><a href="#L124">124</a></td>
+                    <td class="line-code"><code>            }</code></td>
+                </tr>
+                <tr class="code-row" id="L125">
+                    <td class="line-num" data-line="125"><a href="#L125">125</a></td>
+                    <td class="line-code"><code>            <span class="kw">catch</span> (<span class="kw">final</span> <span class="type">ClassNotFoundException</span> | <span class="type">NoClassDefFoundError</span> e)</code></td>
+                </tr>
+                <tr class="code-row" id="L126">
+                    <td class="line-num" data-line="126"><a href="#L126">126</a></td>
+                    <td class="line-code"><code>            {</code></td>
+                </tr>
+                <tr class="code-row" id="L127">
+                    <td class="line-num" data-line="127"><a href="#L127">127</a></td>
+                    <td class="line-code"><code>                problems.add(candidate + <span class="str">&quot;: class not found&quot;</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L128">
+                    <td class="line-num" data-line="128"><a href="#L128">128</a></td>
+                    <td class="line-code"><code>            }</code></td>
+                </tr>
+                <tr class="code-row" id="L129">
+                    <td class="line-num" data-line="129"><a href="#L129">129</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L130">
+                    <td class="line-num" data-line="130"><a href="#L130">130</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L131">
+                    <td class="line-num" data-line="131"><a href="#L131">131</a></td>
+                    <td class="line-code"><code>        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalStateException</span>(<span class="str">&quot;&quot;&quot;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L132">
+                    <td class="line-num" data-line="132"><a href="#L132">132</a></td>
+                    <td class="line-code"><code><span class="str">                No LRUClockMap implementation found. Tried:</span></code></td>
+                </tr>
+                <tr class="code-row" id="L133">
+                    <td class="line-num" data-line="133"><a href="#L133">133</a></td>
+                    <td class="line-code"><code><span class="str">                  %s</span></code></td>
+                </tr>
+                <tr class="code-row" id="L134">
+                    <td class="line-num" data-line="134"><a href="#L134">134</a></td>
+                    <td class="line-code"><code><span class="str">                Provide one via the system property &#39;%s&#39;, a static of(int) on the \</span></code></td>
+                </tr>
+                <tr class="code-row" id="L135">
+                    <td class="line-num" data-line="135"><a href="#L135">135</a></td>
+                    <td class="line-code"><code><span class="str">                interface, or a concrete implementation class in package %s.&quot;&quot;&quot;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L136">
+                    <td class="line-num" data-line="136"><a href="#L136">136</a></td>
+                    <td class="line-code"><code>                .formatted(<span class="type">String</span>.join(<span class="type">System</span>.lineSeparator() + <span class="str">&quot;  &quot;</span>, problems),</code></td>
+                </tr>
+                <tr class="code-row" id="L137">
+                    <td class="line-num" data-line="137"><a href="#L137">137</a></td>
+                    <td class="line-code"><code>                        <span class="type">IMPL_PROPERTY</span>, <span class="type">PACKAGE_NAME</span>));</code></td>
+                </tr>
+                <tr class="code-row" id="L138">
+                    <td class="line-num" data-line="138"><a href="#L138">138</a></td>
+                    <td class="line-code"><code>    }</code></td>
+                </tr>
+                <tr class="code-row" id="L139">
+                    <td class="line-num" data-line="139"><a href="#L139">139</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L140">
+                    <td class="line-num" data-line="140"><a href="#L140">140</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L141">
+                    <td class="line-num" data-line="141"><a href="#L141">141</a></td>
+                    <td class="line-code"><code><span class="comment">     * Builds a creator for a candidate type or returns null if the type</span></code></td>
+                </tr>
+                <tr class="code-row" id="L142">
+                    <td class="line-num" data-line="142"><a href="#L142">142</a></td>
+                    <td class="line-code"><code><span class="comment">     * cannot serve as an implementation.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L143">
+                    <td class="line-num" data-line="143"><a href="#L143">143</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L144">
+                    <td class="line-num" data-line="144"><a href="#L144">144</a></td>
+                    <td class="line-code"><code>    <span class="kw">private</span> <span class="kw">static</span> <span class="type">Creator</span> creatorFor(<span class="kw">final</span> <span class="type">Class</span>&lt;?&gt; type)</code></td>
+                </tr>
+                <tr class="code-row" id="L145">
+                    <td class="line-num" data-line="145"><a href="#L145">145</a></td>
+                    <td class="line-code"><code>    {</code></td>
+                </tr>
+                <tr class="code-row" id="L146">
+                    <td class="line-num" data-line="146"><a href="#L146">146</a></td>
+                    <td class="line-code"><code>        <span class="comment">// preferred: public static of(int)</span></code></td>
+                </tr>
+                <tr class="code-row" id="L147">
+                    <td class="line-num" data-line="147"><a href="#L147">147</a></td>
+                    <td class="line-code"><code>        <span class="kw">try</span></code></td>
+                </tr>
+                <tr class="code-row" id="L148">
+                    <td class="line-num" data-line="148"><a href="#L148">148</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L149">
+                    <td class="line-num" data-line="149"><a href="#L149">149</a></td>
+                    <td class="line-code"><code>            <span class="kw">final</span> <span class="type">Method</span> of = type.getMethod(<span class="str">&quot;of&quot;</span>, <span class="kw">int</span>.<span class="kw">class</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L150">
+                    <td class="line-num" data-line="150"><a href="#L150">150</a></td>
+                    <td class="line-code"><code>            <span class="kw">final</span> <span class="kw">boolean</span> isStatic = <span class="type">Modifier</span>.isStatic(of.getModifiers());</code></td>
+                </tr>
+                <tr class="code-row" id="L151">
+                    <td class="line-num" data-line="151"><a href="#L151">151</a></td>
+                    <td class="line-code"><code>            <span class="kw">final</span> <span class="kw">boolean</span> returnsMap = <span class="type">LRUClockMap</span>.<span class="kw">class</span>.isAssignableFrom(of.getReturnType());</code></td>
+                </tr>
+                <tr class="code-row" id="L152">
+                    <td class="line-num" data-line="152"><a href="#L152">152</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L153">
+                    <td class="line-num" data-line="153"><a href="#L153">153</a></td>
+                    <td class="line-code"><code>            <span class="kw">if</span> (isStatic &amp;&amp; returnsMap)</code></td>
+                </tr>
+                <tr class="code-row" id="L154">
+                    <td class="line-num" data-line="154"><a href="#L154">154</a></td>
+                    <td class="line-code"><code>            {</code></td>
+                </tr>
+                <tr class="code-row" id="L155">
+                    <td class="line-num" data-line="155"><a href="#L155">155</a></td>
+                    <td class="line-code"><code>                of.setAccessible(<span class="lit">true</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L156">
+                    <td class="line-num" data-line="156"><a href="#L156">156</a></td>
+                    <td class="line-code"><code>                <span class="kw">return</span> maxSize -&gt; of.invoke(<span class="lit">null</span>, maxSize);</code></td>
+                </tr>
+                <tr class="code-row" id="L157">
+                    <td class="line-num" data-line="157"><a href="#L157">157</a></td>
+                    <td class="line-code"><code>            }</code></td>
+                </tr>
+                <tr class="code-row" id="L158">
+                    <td class="line-num" data-line="158"><a href="#L158">158</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L159">
+                    <td class="line-num" data-line="159"><a href="#L159">159</a></td>
+                    <td class="line-code"><code>        <span class="kw">catch</span> (<span class="kw">final</span> <span class="type">NoSuchMethodException</span> e)</code></td>
+                </tr>
+                <tr class="code-row" id="L160">
+                    <td class="line-num" data-line="160"><a href="#L160">160</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L161">
+                    <td class="line-num" data-line="161"><a href="#L161">161</a></td>
+                    <td class="line-code"><code>            <span class="comment">// fall through to constructor lookup</span></code></td>
+                </tr>
+                <tr class="code-row" id="L162">
+                    <td class="line-num" data-line="162"><a href="#L162">162</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L163">
+                    <td class="line-num" data-line="163"><a href="#L163">163</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L164">
+                    <td class="line-num" data-line="164"><a href="#L164">164</a></td>
+                    <td class="line-code"><code>        <span class="comment">// fallback: public (int) constructor on a concrete implementation class</span></code></td>
+                </tr>
+                <tr class="code-row" id="L165">
+                    <td class="line-num" data-line="165"><a href="#L165">165</a></td>
+                    <td class="line-code"><code>        <span class="kw">final</span> <span class="kw">boolean</span> isCandidateImpl = <span class="type">LRUClockMap</span>.<span class="kw">class</span>.isAssignableFrom(type)</code></td>
+                </tr>
+                <tr class="code-row" id="L166">
+                    <td class="line-num" data-line="166"><a href="#L166">166</a></td>
+                    <td class="line-code"><code>                &amp;&amp; !type.isInterface()</code></td>
+                </tr>
+                <tr class="code-row" id="L167">
+                    <td class="line-num" data-line="167"><a href="#L167">167</a></td>
+                    <td class="line-code"><code>                &amp;&amp; !<span class="type">Modifier</span>.isAbstract(type.getModifiers());</code></td>
+                </tr>
+                <tr class="code-row" id="L168">
+                    <td class="line-num" data-line="168"><a href="#L168">168</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L169">
+                    <td class="line-num" data-line="169"><a href="#L169">169</a></td>
+                    <td class="line-code"><code>        <span class="kw">if</span> (isCandidateImpl)</code></td>
+                </tr>
+                <tr class="code-row" id="L170">
+                    <td class="line-num" data-line="170"><a href="#L170">170</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L171">
+                    <td class="line-num" data-line="171"><a href="#L171">171</a></td>
+                    <td class="line-code"><code>            <span class="kw">try</span></code></td>
+                </tr>
+                <tr class="code-row" id="L172">
+                    <td class="line-num" data-line="172"><a href="#L172">172</a></td>
+                    <td class="line-code"><code>            {</code></td>
+                </tr>
+                <tr class="code-row" id="L173">
+                    <td class="line-num" data-line="173"><a href="#L173">173</a></td>
+                    <td class="line-code"><code>                <span class="kw">final</span> <span class="kw">var</span> ctor = type.getConstructor(<span class="kw">int</span>.<span class="kw">class</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L174">
+                    <td class="line-num" data-line="174"><a href="#L174">174</a></td>
+                    <td class="line-code"><code>                <span class="kw">return</span> maxSize -&gt; ctor.newInstance(maxSize);</code></td>
+                </tr>
+                <tr class="code-row" id="L175">
+                    <td class="line-num" data-line="175"><a href="#L175">175</a></td>
+                    <td class="line-code"><code>            }</code></td>
+                </tr>
+                <tr class="code-row" id="L176">
+                    <td class="line-num" data-line="176"><a href="#L176">176</a></td>
+                    <td class="line-code"><code>            <span class="kw">catch</span> (<span class="kw">final</span> <span class="type">NoSuchMethodException</span> e)</code></td>
+                </tr>
+                <tr class="code-row" id="L177">
+                    <td class="line-num" data-line="177"><a href="#L177">177</a></td>
+                    <td class="line-code"><code>            {</code></td>
+                </tr>
+                <tr class="code-row" id="L178">
+                    <td class="line-num" data-line="178"><a href="#L178">178</a></td>
+                    <td class="line-code"><code>                <span class="comment">// not usable</span></code></td>
+                </tr>
+                <tr class="code-row" id="L179">
+                    <td class="line-num" data-line="179"><a href="#L179">179</a></td>
+                    <td class="line-code"><code>            }</code></td>
+                </tr>
+                <tr class="code-row" id="L180">
+                    <td class="line-num" data-line="180"><a href="#L180">180</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L181">
+                    <td class="line-num" data-line="181"><a href="#L181">181</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L182">
+                    <td class="line-num" data-line="182"><a href="#L182">182</a></td>
+                    <td class="line-code"><code>        <span class="kw">return</span> <span class="lit">null</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L183">
+                    <td class="line-num" data-line="183"><a href="#L183">183</a></td>
+                    <td class="line-code"><code>    }</code></td>
+                </tr>
+                <tr class="code-row" id="L184">
+                    <td class="line-num" data-line="184"><a href="#L184">184</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L185">
+                    <td class="line-num" data-line="185"><a href="#L185">185</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L186">
+                    <td class="line-num" data-line="186"><a href="#L186">186</a></td>
+                    <td class="line-code"><code><span class="comment">     * Best-effort scan of the package directory on the classpath to discover</span></code></td>
+                </tr>
+                <tr class="code-row" id="L187">
+                    <td class="line-num" data-line="187"><a href="#L187">187</a></td>
+                    <td class="line-code"><code><span class="comment">     * implementation class names. Works for directory-based classpaths, which</span></code></td>
+                </tr>
+                <tr class="code-row" id="L188">
+                    <td class="line-num" data-line="188"><a href="#L188">188</a></td>
+                    <td class="line-code"><code><span class="comment">     * is the normal case for locally built Maven modules.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L189">
+                    <td class="line-num" data-line="189"><a href="#L189">189</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L190">
+                    <td class="line-num" data-line="190"><a href="#L190">190</a></td>
+                    <td class="line-code"><code>    <span class="kw">private</span> <span class="kw">static</span> <span class="type">List</span>&lt;<span class="type">String</span>&gt; scanPackage()</code></td>
+                </tr>
+                <tr class="code-row" id="L191">
+                    <td class="line-num" data-line="191"><a href="#L191">191</a></td>
+                    <td class="line-code"><code>    {</code></td>
+                </tr>
+                <tr class="code-row" id="L192">
+                    <td class="line-num" data-line="192"><a href="#L192">192</a></td>
+                    <td class="line-code"><code>        <span class="kw">final</span> <span class="kw">var</span> result = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt;();</code></td>
+                </tr>
+                <tr class="code-row" id="L193">
+                    <td class="line-num" data-line="193"><a href="#L193">193</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L194">
+                    <td class="line-num" data-line="194"><a href="#L194">194</a></td>
+                    <td class="line-code"><code>        <span class="kw">try</span></code></td>
+                </tr>
+                <tr class="code-row" id="L195">
+                    <td class="line-num" data-line="195"><a href="#L195">195</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L196">
+                    <td class="line-num" data-line="196"><a href="#L196">196</a></td>
+                    <td class="line-code"><code>            <span class="kw">final</span> <span class="kw">var</span> loader = <span class="type">TestMapFactory</span>.<span class="kw">class</span>.getClassLoader();</code></td>
+                </tr>
+                <tr class="code-row" id="L197">
+                    <td class="line-num" data-line="197"><a href="#L197">197</a></td>
+                    <td class="line-code"><code>            <span class="kw">final</span> <span class="type">Enumeration</span>&lt;<span class="type">URL</span>&gt; urls = loader.getResources(<span class="type">PACKAGE_PATH</span>);</code></td>
+                </tr>
+                <tr class="code-row" id="L198">
+                    <td class="line-num" data-line="198"><a href="#L198">198</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L199">
+                    <td class="line-num" data-line="199"><a href="#L199">199</a></td>
+                    <td class="line-code"><code>            <span class="kw">while</span> (urls.hasMoreElements())</code></td>
+                </tr>
+                <tr class="code-row" id="L200">
+                    <td class="line-num" data-line="200"><a href="#L200">200</a></td>
+                    <td class="line-code"><code>            {</code></td>
+                </tr>
+                <tr class="code-row" id="L201">
+                    <td class="line-num" data-line="201"><a href="#L201">201</a></td>
+                    <td class="line-code"><code>                <span class="kw">final</span> <span class="kw">var</span> url = urls.nextElement();</code></td>
+                </tr>
+                <tr class="code-row" id="L202">
+                    <td class="line-num" data-line="202"><a href="#L202">202</a></td>
+                    <td class="line-code"><code>                <span class="kw">if</span> (!<span class="str">&quot;file&quot;</span>.equals(url.getProtocol()))</code></td>
+                </tr>
+                <tr class="code-row" id="L203">
+                    <td class="line-num" data-line="203"><a href="#L203">203</a></td>
+                    <td class="line-code"><code>                {</code></td>
+                </tr>
+                <tr class="code-row" id="L204">
+                    <td class="line-num" data-line="204"><a href="#L204">204</a></td>
+                    <td class="line-code"><code>                    <span class="kw">continue</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L205">
+                    <td class="line-num" data-line="205"><a href="#L205">205</a></td>
+                    <td class="line-code"><code>                }</code></td>
+                </tr>
+                <tr class="code-row" id="L206">
+                    <td class="line-num" data-line="206"><a href="#L206">206</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L207">
+                    <td class="line-num" data-line="207"><a href="#L207">207</a></td>
+                    <td class="line-code"><code>                <span class="kw">final</span> <span class="kw">var</span> dir = <span class="kw">new</span> <span class="type">File</span>(url.toURI());</code></td>
+                </tr>
+                <tr class="code-row" id="L208">
+                    <td class="line-num" data-line="208"><a href="#L208">208</a></td>
+                    <td class="line-code"><code>                <span class="kw">final</span> <span class="kw">var</span> files = dir.listFiles((d, name) -&gt;</code></td>
+                </tr>
+                <tr class="code-row" id="L209">
+                    <td class="line-num" data-line="209"><a href="#L209">209</a></td>
+                    <td class="line-code"><code>                        name.endsWith(<span class="str">&quot;.class&quot;</span>) &amp;&amp; !name.contains(<span class="str">&quot;$&quot;</span>));</code></td>
+                </tr>
+                <tr class="code-row" id="L210">
+                    <td class="line-num" data-line="210"><a href="#L210">210</a></td>
+                    <td class="line-code"><code>                <span class="kw">if</span> (files == <span class="lit">null</span>)</code></td>
+                </tr>
+                <tr class="code-row" id="L211">
+                    <td class="line-num" data-line="211"><a href="#L211">211</a></td>
+                    <td class="line-code"><code>                {</code></td>
+                </tr>
+                <tr class="code-row" id="L212">
+                    <td class="line-num" data-line="212"><a href="#L212">212</a></td>
+                    <td class="line-code"><code>                    <span class="kw">continue</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L213">
+                    <td class="line-num" data-line="213"><a href="#L213">213</a></td>
+                    <td class="line-code"><code>                }</code></td>
+                </tr>
+                <tr class="code-row" id="L214">
+                    <td class="line-num" data-line="214"><a href="#L214">214</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L215">
+                    <td class="line-num" data-line="215"><a href="#L215">215</a></td>
+                    <td class="line-code"><code>                <span class="kw">for</span> (<span class="kw">final</span> <span class="kw">var</span> file : files)</code></td>
+                </tr>
+                <tr class="code-row" id="L216">
+                    <td class="line-num" data-line="216"><a href="#L216">216</a></td>
+                    <td class="line-code"><code>                {</code></td>
+                </tr>
+                <tr class="code-row" id="L217">
+                    <td class="line-num" data-line="217"><a href="#L217">217</a></td>
+                    <td class="line-code"><code>                    <span class="kw">final</span> <span class="kw">var</span> className = <span class="type">PACKAGE_NAME</span> + <span class="str">&quot;.&quot;</span></code></td>
+                </tr>
+                <tr class="code-row" id="L218">
+                    <td class="line-num" data-line="218"><a href="#L218">218</a></td>
+                    <td class="line-code"><code>                            + file.getName().substring(<span class="num">0</span>, file.getName().length() - <span class="str">&quot;.class&quot;</span>.length());</code></td>
+                </tr>
+                <tr class="code-row" id="L219">
+                    <td class="line-num" data-line="219"><a href="#L219">219</a></td>
+                    <td class="line-code"><code>                    <span class="kw">if</span> (!className.equals(<span class="type">TestMapFactory</span>.<span class="kw">class</span>.getName())</code></td>
+                </tr>
+                <tr class="code-row" id="L220">
+                    <td class="line-num" data-line="220"><a href="#L220">220</a></td>
+                    <td class="line-code"><code>                            &amp;&amp; !className.equals(<span class="type">LRUClockMap</span>.<span class="kw">class</span>.getName()))</code></td>
+                </tr>
+                <tr class="code-row" id="L221">
+                    <td class="line-num" data-line="221"><a href="#L221">221</a></td>
+                    <td class="line-code"><code>                    {</code></td>
+                </tr>
+                <tr class="code-row" id="L222">
+                    <td class="line-num" data-line="222"><a href="#L222">222</a></td>
+                    <td class="line-code"><code>                        result.add(className);</code></td>
+                </tr>
+                <tr class="code-row" id="L223">
+                    <td class="line-num" data-line="223"><a href="#L223">223</a></td>
+                    <td class="line-code"><code>                    }</code></td>
+                </tr>
+                <tr class="code-row" id="L224">
+                    <td class="line-num" data-line="224"><a href="#L224">224</a></td>
+                    <td class="line-code"><code>                }</code></td>
+                </tr>
+                <tr class="code-row" id="L225">
+                    <td class="line-num" data-line="225"><a href="#L225">225</a></td>
+                    <td class="line-code"><code>            }</code></td>
+                </tr>
+                <tr class="code-row" id="L226">
+                    <td class="line-num" data-line="226"><a href="#L226">226</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L227">
+                    <td class="line-num" data-line="227"><a href="#L227">227</a></td>
+                    <td class="line-code"><code>        <span class="kw">catch</span> (<span class="kw">final</span> <span class="type">Exception</span> e)</code></td>
+                </tr>
+                <tr class="code-row" id="L228">
+                    <td class="line-num" data-line="228"><a href="#L228">228</a></td>
+                    <td class="line-code"><code>        {</code></td>
+                </tr>
+                <tr class="code-row" id="L229">
+                    <td class="line-num" data-line="229"><a href="#L229">229</a></td>
+                    <td class="line-code"><code>            <span class="comment">// best effort only, the explicit candidates still apply</span></code></td>
+                </tr>
+                <tr class="code-row" id="L230">
+                    <td class="line-num" data-line="230"><a href="#L230">230</a></td>
+                    <td class="line-code"><code>        }</code></td>
+                </tr>
+                <tr class="code-row" id="L231">
+                    <td class="line-num" data-line="231"><a href="#L231">231</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L232">
+                    <td class="line-num" data-line="232"><a href="#L232">232</a></td>
+                    <td class="line-code"><code>        <span class="kw">return</span> result;</code></td>
+                </tr>
+                <tr class="code-row" id="L233">
+                    <td class="line-num" data-line="233"><a href="#L233">233</a></td>
+                    <td class="line-code"><code>    }</code></td>
+                </tr>
+                <tr class="code-row" id="L234">
+                    <td class="line-num" data-line="234"><a href="#L234">234</a></td>
+                    <td class="line-code"><code>}</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function updateHighlight() {
+            document.querySelectorAll('.code-row.highlighted').forEach(r => r.classList.remove('highlighted'));
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#L')) {
+                const el = document.getElementById(hash.substring(1));
+                if (el) {
+                    el.classList.add('highlighted');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+        window.addEventListener('hashchange', updateHighlight);
+        window.addEventListener('DOMContentLoaded', updateHighlight);
+
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-theme');
+            const btn = document.getElementById('themeBtn');
+            btn.innerText = isDark ? '☀️ Light' : '🌙 Dark';
+            localStorage.setItem('presentation-theme', isDark ? 'dark' : 'light');
+        }
+        if (localStorage.getItem('presentation-theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            const btn = document.getElementById('themeBtn');
+            if (btn) btn.innerText = '☀️ Light';
+        }
+
+        function copyCode() {
+            const codeText = Array.from(document.querySelectorAll('.line-code')).map(td => td.textContent).join('\n');
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const orig = btn.innerText;
+                btn.innerText = '✅ Copied!';
+                setTimeout(() => btn.innerText = orig, 1800);
+            });
+        }
+    </script>
+</body>
+</html>

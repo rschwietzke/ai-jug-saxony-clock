@@ -58,6 +58,9 @@
         .speedup-fast { color: #16a34a; font-weight: 700; }
         .speedup-slow { color: #dc2626; }
         .perf-tag { font-size: 0.8rem; padding: 0.15rem 0.4rem; border-radius: 4px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #334155; font-family: 'JetBrains Mono', monospace; }
+        .module-source-link { color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.45rem; border-radius: 6px; background: rgba(2, 132, 199, 0.06); border: 1px solid rgba(2, 132, 199, 0.15); transition: all 0.2s ease; font-weight: 700; }
+        .module-source-link:hover { background: rgba(2, 132, 199, 0.14); border-color: var(--primary); text-decoration: none; transform: translateY(-1px); }
+        .module-source-link .code-icon { font-size: 0.75rem; opacity: 0.75; }
     </style>
 </head>
 <body>
@@ -119,7 +122,6 @@
                 <tr>
                     <th>Module</th>
                     <th>AI Model / Implementation</th>
-                    <th>Storage Strategy</th>
                     <th>Unit Tests</th>
                     <th>Instruction Coverage</th>
                     <th>Line Coverage</th>
@@ -130,9 +132,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>demo0</strong></td>
+                    <td><a href="sources/demo0/LRUClockMap.html" class="module-source-link" title="View Source: demo0/LRUClockMap.java"><strong>demo0</strong> <span class="code-icon">📄</span></a></td>
                     <td>Human Baseline</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo0" class="badge badge-success" style="text-decoration: none;">37 Passed</a> <span class="badge badge-time">⏱️ 0.72s</span></td>
                     <td><a href="jacoco/demo0/org.jugsaxony.clock.demo0/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">97.3% (686/705)</a></td>
                     <td><a href="jacoco/demo0/org.jugsaxony.clock.demo0/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">98.2% (161/164)</a></td>
@@ -141,9 +142,8 @@
                     <td><span class="badge badge-success">100% Passed ✅</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo1</strong></td>
+                    <td><a href="sources/demo1/LRUClockMap.html" class="module-source-link" title="View Source: demo1/LRUClockMap.java"><strong>demo1</strong> <span class="code-icon">📄</span></a></td>
                     <td>Gemini 3.7 Flash High (Antigravity)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo1" class="badge badge-warning" style="text-decoration: none;">51/52 Passed</a> <span class="badge badge-time">⏱️ 0.94s</span></td>
                     <td><a href="jacoco/demo1/org.jugsaxony.clock.demo1/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">71.5% (504/705)</a></td>
                     <td><a href="jacoco/demo1/org.jugsaxony.clock.demo1/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">78.7% (129/164)</a></td>
@@ -152,9 +152,8 @@
                     <td><span class="badge badge-warning">1 Failed ❌</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo2</strong></td>
+                    <td><a href="sources/demo2/LRUClockMap.html" class="module-source-link" title="View Source: demo2/LRUClockMap.java"><strong>demo2</strong> <span class="code-icon">📄</span></a></td>
                     <td>Kimi K3 (Kilo Code)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo2" class="badge badge-warning" style="text-decoration: none;">50/52 Passed</a> <span class="badge badge-time">⏱️ 1.49s</span></td>
                     <td><a href="jacoco/demo2/org.jugsaxony.clock.demo2/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">71.4% (503/704)</a></td>
                     <td><a href="jacoco/demo2/org.jugsaxony.clock.demo2/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">77.1% (128/166)</a></td>
@@ -163,9 +162,8 @@
                     <td><span class="badge badge-warning">2 Failed ❌</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo3</strong></td>
+                    <td><a href="sources/demo3/LRUClockMap.html" class="module-source-link" title="View Source: demo3/LRUClockMap.java"><strong>demo3</strong> <span class="code-icon">📄</span></a></td>
                     <td>OpenAI 5.6 Sol Max (Kilo Code)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo3" class="badge badge-success" style="text-decoration: none;">15 Passed</a> <span class="badge badge-time">⏱️ 0.19s</span></td>
                     <td><a href="jacoco/demo3/org.jugsaxony.clock.demo3/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">69.2% (487/704)</a></td>
                     <td><a href="jacoco/demo3/org.jugsaxony.clock.demo3/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">74.1% (123/166)</a></td>
@@ -174,9 +172,8 @@
                     <td><span class="badge badge-success">100% Passed ✅</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo4</strong></td>
+                    <td><a href="sources/demo4/LRUClockMap.html" class="module-source-link" title="View Source: demo4/LRUClockMap.java"><strong>demo4</strong> <span class="code-icon">📄</span></a></td>
                     <td>Gemma 4 31B Thinking (Kilo Code)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo4" class="badge badge-warning" style="text-decoration: none;">9/15 Passed</a> <span class="badge badge-time">⏱️ 0.59s</span></td>
                     <td><a href="jacoco/demo4/org.jugsaxony.clock.demo4/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">57.5% (405/704)</a></td>
                     <td><a href="jacoco/demo4/org.jugsaxony.clock.demo4/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">60.8% (101/166)</a></td>
@@ -185,9 +182,8 @@
                     <td><span class="badge badge-warning">6 Failed ❌</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo5</strong></td>
+                    <td><a href="sources/demo5/LRUClockMap.html" class="module-source-link" title="View Source: demo5/LRUClockMap.java"><strong>demo5</strong> <span class="code-icon">📄</span></a></td>
                     <td>Deepseek V4 Flash Max (Kilo Code)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo5" class="badge badge-warning" style="text-decoration: none;">42/44 Passed</a> <span class="badge badge-time">⏱️ 0.78s</span></td>
                     <td><a href="jacoco/demo5/org.jugsaxony.clock.demo5/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">71.4% (503/704)</a></td>
                     <td><a href="jacoco/demo5/org.jugsaxony.clock.demo5/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">77.1% (128/166)</a></td>
@@ -196,9 +192,8 @@
                     <td><span class="badge badge-warning">2 Failed ❌</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo6</strong></td>
+                    <td><a href="sources/demo6/LRUClockMap.html" class="module-source-link" title="View Source: demo6/LRUClockMap.java"><strong>demo6</strong> <span class="code-icon">📄</span></a></td>
                     <td>Claude Opus 5 Ultra (Claude)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo6" class="badge badge-warning" style="text-decoration: none;">128/130 Passed</a> <span class="badge badge-time">⏱️ 2.73s</span></td>
                     <td><a href="jacoco/demo6/org.jugsaxony.clock.demo6/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">71.4% (503/704)</a></td>
                     <td><a href="jacoco/demo6/org.jugsaxony.clock.demo6/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">77.1% (128/166)</a></td>
@@ -207,9 +202,8 @@
                     <td><span class="badge badge-warning">2 Failed ❌</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo7</strong></td>
+                    <td><a href="sources/demo7/LRUClockMap.html" class="module-source-link" title="View Source: demo7/LRUClockMap.java"><strong>demo7</strong> <span class="code-icon">📄</span></a></td>
                     <td>Qwen 38 max XHigh (Kilo Code)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo7" class="badge badge-warning" style="text-decoration: none;">68/72 Passed</a> <span class="badge badge-time">⏱️ 1.02s</span></td>
                     <td><a href="jacoco/demo7/org.jugsaxony.clock.demo7/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">67.2% (473/704)</a></td>
                     <td><a href="jacoco/demo7/org.jugsaxony.clock.demo7/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">72.3% (120/166)</a></td>
@@ -218,9 +212,8 @@
                     <td><span class="badge badge-warning">4 Failed ❌</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo8</strong></td>
+                    <td><a href="sources/demo8/LRUClockMap.html" class="module-source-link" title="View Source: demo8/LRUClockMap.java"><strong>demo8</strong> <span class="code-icon">📄</span></a></td>
                     <td>Gemini 3.7 Flash High (Kilo Code)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo8" class="badge badge-warning" style="text-decoration: none;">41/42 Passed</a> <span class="badge badge-time">⏱️ 1.04s</span></td>
                     <td><a href="jacoco/demo8/org.jugsaxony.clock.demo8/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">71.4% (503/704)</a></td>
                     <td><a href="jacoco/demo8/org.jugsaxony.clock.demo8/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">77.1% (128/166)</a></td>
@@ -229,9 +222,8 @@
                     <td><span class="badge badge-warning">1 Failed ❌</span></td>
                 </tr>
                 <tr>
-                    <td><strong>demo9</strong></td>
+                    <td><a href="sources/demo9/LRUClockMap.html" class="module-source-link" title="View Source: demo9/LRUClockMap.java"><strong>demo9</strong> <span class="code-icon">📄</span></a></td>
                     <td>Gemini 3.8 Flash High (Antigravity)</td>
-                    <td><span class="badge badge-info">Circular buffer + Wrapper nodes</span></td>
                     <td><a href="surefire.html#demo9" class="badge badge-warning" style="text-decoration: none;">45/46 Passed</a> <span class="badge badge-time">⏱️ 0.77s</span></td>
                     <td><a href="jacoco/demo9/org.jugsaxony.clock.demo9/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">71.4% (503/704)</a></td>
                     <td><a href="jacoco/demo9/org.jugsaxony.clock.demo9/LRUClockMap.java.html" class="badge badge-success" style="text-decoration: none;">77.1% (128/166)</a></td>

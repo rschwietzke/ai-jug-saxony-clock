@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>demo2 - LRUClockMapInterface.java (Source Code Viewer)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --header-bg: #f8fafc;
+            --border: #e2e8f0;
+            --gutter-bg: #f8fafc;
+            --gutter-num: #94a3b8;
+            --text: #0f172a;
+            --primary: #0284c7;
+            --primary-glow: rgba(2, 132, 199, 0.12);
+            --accent: #7c3aed;
+            --line-highlight: #fef9c3;
+            --line-highlight-border: #eab308;
+            --kw-color: #cf222e;
+            --str-color: #0a3069;
+            --comment-color: #6e7781;
+            --ann-color: #8250df;
+            --num-color: #0550ae;
+            --type-color: #953800;
+        }
+        body.dark-theme {
+            --bg: #0d1117;
+            --header-bg: #161b22;
+            --border: #30363d;
+            --gutter-bg: #161b22;
+            --gutter-num: #6e7681;
+            --text: #e6edf3;
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.15);
+            --accent: #a855f7;
+            --line-highlight: #3b3014;
+            --line-highlight-border: #d29922;
+            --kw-color: #ff7b72;
+            --str-color: #a5d6ff;
+            --comment-color: #8b949e;
+            --ann-color: #d2a8ff;
+            --num-color: #79c0ff;
+            --type-color: #ffa657;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding-top: 60px;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .viewer-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            gap: 1rem;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .module-badge {
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+        }
+        .model-badge {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.82rem;
+            font-weight: 500;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+        }
+        .file-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .file-meta {
+            font-size: 0.8rem;
+            color: var(--gutter-num);
+        }
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-select {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+        .nav-select:focus {
+            border-color: var(--primary);
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.15s ease;
+        }
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .code-container {
+            width: 100%;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+        .code-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+        .code-row {
+            transition: background 0.1s ease;
+        }
+        .code-row:hover {
+            background-color: var(--header-bg);
+        }
+        .code-row.highlighted {
+            background-color: var(--line-highlight) !important;
+        }
+        .code-row.highlighted td.line-num {
+            border-left: 4px solid var(--line-highlight-border);
+            color: var(--text);
+            font-weight: 700;
+        }
+        td.line-num {
+            width: 1%;
+            min-width: 3.5rem;
+            padding: 0 1rem 0 0.75rem;
+            text-align: right;
+            vertical-align: top;
+            color: var(--gutter-num);
+            user-select: none;
+            border-right: 1px solid var(--border);
+            background-color: var(--gutter-bg);
+        }
+        td.line-num a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+        td.line-num a:hover {
+            color: var(--primary);
+        }
+        td.line-code {
+            padding: 0 1.25rem;
+            vertical-align: top;
+            white-space: pre;
+        }
+        .kw { color: var(--kw-color); font-weight: 700; }
+        .lit { color: var(--kw-color); font-weight: 700; }
+        .str { color: var(--str-color); }
+        .comment { color: var(--comment-color); font-style: italic; }
+        .ann { color: var(--ann-color); font-weight: 600; }
+        .num { color: var(--num-color); }
+        .type { color: var(--type-color); }
+    </style>
+</head>
+<body>
+    <header class="viewer-header">
+        <div class="header-left">
+            <a href="../../index.html" class="back-btn" onclick="if (document.referrer && document.referrer.includes('reports')) { history.back(); return false; }">← Back</a>
+            <span class="module-badge">demo2</span>
+            <span class="model-badge">Kimi K3 (Kilo Code)</span>
+            <span class="file-title">LRUClockMapInterface.java</span>
+            <span class="file-meta">96 lines • 3.4 KB</span>
+        </div>
+        <div class="header-center">
+            <select class="nav-select" title="Switch File in demo2" onchange="window.location.href=this.value;">
+                <option value="LRUClockMap.html">LRUClockMap.java</option>
+                <option value="LRUClockMapTest.html">LRUClockMapTest.java</option>
+                <option value="LRUClockMapInterface.html" selected>LRUClockMapInterface.java</option>
+            </select>
+            <select class="nav-select" title="Switch Module for LRUClockMapInterface.java" onchange="window.location.href=this.value;">
+                <option value="../demo0/LRUClockMapInterface.html">demo0</option>
+                <option value="../demo1/LRUClockMapInterface.html">demo1</option>
+                <option value="../demo2/LRUClockMapInterface.html" selected>demo2</option>
+                <option value="../demo3/LRUClockMapInterface.html">demo3</option>
+                <option value="../demo4/LRUClockMapInterface.html">demo4</option>
+                <option value="../demo5/LRUClockMapInterface.html">demo5</option>
+                <option value="../demo6/LRUClockMapInterface.html">demo6</option>
+                <option value="../demo7/LRUClockMapInterface.html">demo7</option>
+                <option value="../demo8/LRUClockMapInterface.html">demo8</option>
+                <option value="../demo9/LRUClockMapInterface.html">demo9</option>
+            </select>
+        </div>
+        <div class="header-right">
+            <button class="action-btn" id="copyBtn" onclick="copyCode()">📋 Copy Code</button>
+            <a href="LRUClockMapInterface.java" download="demo2_LRUClockMapInterface.java" class="action-btn">💾 Raw Java</a>
+            <button class="action-btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+        </div>
+    </header>
+    <div class="code-container">
+        <table class="code-table">
+            <tbody>
+                <tr class="code-row" id="L1">
+                    <td class="line-num" data-line="1"><a href="#L1">1</a></td>
+                    <td class="line-code"><code><span class="kw">package</span> org.jugsaxony.clock.demo2;</code></td>
+                </tr>
+                <tr class="code-row" id="L2">
+                    <td class="line-num" data-line="2"><a href="#L2">2</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L3">
+                    <td class="line-num" data-line="3"><a href="#L3">3</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.util.<span class="type">ArrayList</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L4">
+                    <td class="line-num" data-line="4"><a href="#L4">4</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.util.<span class="type">Arrays</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L5">
+                    <td class="line-num" data-line="5"><a href="#L5">5</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.util.<span class="type">List</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L6">
+                    <td class="line-num" data-line="6"><a href="#L6">6</a></td>
+                    <td class="line-code"><code><span class="kw">import</span> java.util.<span class="type">StringJoiner</span>;</code></td>
+                </tr>
+                <tr class="code-row" id="L7">
+                    <td class="line-num" data-line="7"><a href="#L7">7</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L8">
+                    <td class="line-num" data-line="8"><a href="#L8">8</a></td>
+                    <td class="line-code"><code><span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L9">
+                    <td class="line-num" data-line="9"><a href="#L9">9</a></td>
+                    <td class="line-code"><code><span class="comment"> * This is an interface for an LRU map implementation based on the clock algorithm.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L10">
+                    <td class="line-num" data-line="10"><a href="#L10">10</a></td>
+                    <td class="line-code"><code><span class="comment"> * The LRU part is not really predictable, but it is fast and simple. </span></code></td>
+                </tr>
+                <tr class="code-row" id="L11">
+                    <td class="line-num" data-line="11"><a href="#L11">11</a></td>
+                    <td class="line-code"><code><span class="comment"> * We don&#39;t keep a linked list, rather a marker that give every entry a second chance. </span></code></td>
+                </tr>
+                <tr class="code-row" id="L12">
+                    <td class="line-num" data-line="12"><a href="#L12">12</a></td>
+                    <td class="line-code"><code><span class="comment"> * If the second chance is false, we can evict this entry. This can happen</span></code></td>
+                </tr>
+                <tr class="code-row" id="L13">
+                    <td class="line-num" data-line="13"><a href="#L13">13</a></td>
+                    <td class="line-code"><code><span class="comment"> * rather early. In general, it is still a good enough LRU implementation.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L14">
+                    <td class="line-num" data-line="14"><a href="#L14">14</a></td>
+                    <td class="line-code"><code><span class="comment"> * https://www.geeksforgeeks.org/operating-systems/second-chance-or-clock-page-replacement-policy/</span></code></td>
+                </tr>
+                <tr class="code-row" id="L15">
+                    <td class="line-num" data-line="15"><a href="#L15">15</a></td>
+                    <td class="line-code"><code><span class="comment"> *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L16">
+                    <td class="line-num" data-line="16"><a href="#L16">16</a></td>
+                    <td class="line-code"><code><span class="comment"> * The base hashmap is an open addressing hash table.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L17">
+                    <td class="line-num" data-line="17"><a href="#L17">17</a></td>
+                    <td class="line-code"><code><span class="comment"> * Not thread-safe! No support for null keys or null values. </span></code></td>
+                </tr>
+                <tr class="code-row" id="L18">
+                    <td class="line-num" data-line="18"><a href="#L18">18</a></td>
+                    <td class="line-code"><code><span class="comment"> *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L19">
+                    <td class="line-num" data-line="19"><a href="#L19">19</a></td>
+                    <td class="line-code"><code><span class="comment"> * @author René Schwietzke</span></code></td>
+                </tr>
+                <tr class="code-row" id="L20">
+                    <td class="line-num" data-line="20"><a href="#L20">20</a></td>
+                    <td class="line-code"><code><span class="comment"> */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L21">
+                    <td class="line-num" data-line="21"><a href="#L21">21</a></td>
+                    <td class="line-code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">LRUClockMapInterface</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></td>
+                </tr>
+                <tr class="code-row" id="L22">
+                    <td class="line-num" data-line="22"><a href="#L22">22</a></td>
+                    <td class="line-code"><code>{</code></td>
+                </tr>
+                <tr class="code-row" id="L23">
+                    <td class="line-num" data-line="23"><a href="#L23">23</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L24">
+                    <td class="line-num" data-line="24"><a href="#L24">24</a></td>
+                    <td class="line-code"><code><span class="comment">     * The only way to create a new LRUClockMap. Each map will have</span></code></td>
+                </tr>
+                <tr class="code-row" id="L25">
+                    <td class="line-num" data-line="25"><a href="#L25">25</a></td>
+                    <td class="line-code"><code><span class="comment">     * a defined load factor of 0.5f which cannot be changed.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L26">
+                    <td class="line-num" data-line="26"><a href="#L26">26</a></td>
+                    <td class="line-code"><code><span class="comment">     * </span></code></td>
+                </tr>
+                <tr class="code-row" id="L27">
+                    <td class="line-num" data-line="27"><a href="#L27">27</a></td>
+                    <td class="line-code"><code><span class="comment">     * Note: Because we cannot define a Constructor in an interface and</span></code></td>
+                </tr>
+                <tr class="code-row" id="L28">
+                    <td class="line-num" data-line="28"><a href="#L28">28</a></td>
+                    <td class="line-code"><code><span class="comment">     * we want to things simple, we publish this as implementation guidance.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L29">
+                    <td class="line-num" data-line="29"><a href="#L29">29</a></td>
+                    <td class="line-code"><code><span class="comment">     * </span></code></td>
+                </tr>
+                <tr class="code-row" id="L30">
+                    <td class="line-num" data-line="30"><a href="#L30">30</a></td>
+                    <td class="line-code"><code><span class="comment">     * @param maxSize </span></code></td>
+                </tr>
+                <tr class="code-row" id="L31">
+                    <td class="line-num" data-line="31"><a href="#L31">31</a></td>
+                    <td class="line-code"><code><span class="comment">     *  the maximum size of the map, putting another new key </span></code></td>
+                </tr>
+                <tr class="code-row" id="L32">
+                    <td class="line-num" data-line="32"><a href="#L32">32</a></td>
+                    <td class="line-code"><code><span class="comment">     *  into the map will evict another key based on a good enough LRU concept</span></code></td>
+                </tr>
+                <tr class="code-row" id="L33">
+                    <td class="line-num" data-line="33"><a href="#L33">33</a></td>
+                    <td class="line-code"><code><span class="comment">     * @return a new LRUClockMap</span></code></td>
+                </tr>
+                <tr class="code-row" id="L34">
+                    <td class="line-num" data-line="34"><a href="#L34">34</a></td>
+                    <td class="line-code"><code><span class="comment">     * </span></code></td>
+                </tr>
+                <tr class="code-row" id="L35">
+                    <td class="line-num" data-line="35"><a href="#L35">35</a></td>
+                    <td class="line-code"><code><span class="comment">     * @throws IllegalArgumentException if maxSize is less than 4</span></code></td>
+                </tr>
+                <tr class="code-row" id="L36">
+                    <td class="line-num" data-line="36"><a href="#L36">36</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L37">
+                    <td class="line-num" data-line="37"><a href="#L37">37</a></td>
+                    <td class="line-code"><code>    <span class="comment">// public static &lt;K, V&gt; LRUClockMap&lt;K, V&gt; of(final int maxSize);</span></code></td>
+                </tr>
+                <tr class="code-row" id="L38">
+                    <td class="line-num" data-line="38"><a href="#L38">38</a></td>
+                    <td class="line-code"><code>    </code></td>
+                </tr>
+                <tr class="code-row" id="L39">
+                    <td class="line-num" data-line="39"><a href="#L39">39</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L40">
+                    <td class="line-num" data-line="40"><a href="#L40">40</a></td>
+                    <td class="line-code"><code><span class="comment">     * Read data without touching the clock flag. This is mostly for testing purposes</span></code></td>
+                </tr>
+                <tr class="code-row" id="L41">
+                    <td class="line-num" data-line="41"><a href="#L41">41</a></td>
+                    <td class="line-code"><code><span class="comment">     * or in case you really don&#39;t want to affect the LRU state.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L42">
+                    <td class="line-num" data-line="42"><a href="#L42">42</a></td>
+                    <td class="line-code"><code><span class="comment">     *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L43">
+                    <td class="line-num" data-line="43"><a href="#L43">43</a></td>
+                    <td class="line-code"><code><span class="comment">     * @param key what key to look for</span></code></td>
+                </tr>
+                <tr class="code-row" id="L44">
+                    <td class="line-num" data-line="44"><a href="#L44">44</a></td>
+                    <td class="line-code"><code><span class="comment">     * @return the value for the key or null if not found</span></code></td>
+                </tr>
+                <tr class="code-row" id="L45">
+                    <td class="line-num" data-line="45"><a href="#L45">45</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L46">
+                    <td class="line-num" data-line="46"><a href="#L46">46</a></td>
+                    <td class="line-code"><code>    <span class="kw">public</span> <span class="type">V</span> getRaw(<span class="kw">final</span> <span class="type">K</span> key);</code></td>
+                </tr>
+                <tr class="code-row" id="L47">
+                    <td class="line-num" data-line="47"><a href="#L47">47</a></td>
+                    <td class="line-code"><code>    </code></td>
+                </tr>
+                <tr class="code-row" id="L48">
+                    <td class="line-num" data-line="48"><a href="#L48">48</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L49">
+                    <td class="line-num" data-line="49"><a href="#L49">49</a></td>
+                    <td class="line-code"><code><span class="comment">     * Get a value from the map. This will set the second chance flag</span></code></td>
+                </tr>
+                <tr class="code-row" id="L50">
+                    <td class="line-num" data-line="50"><a href="#L50">50</a></td>
+                    <td class="line-code"><code><span class="comment">     * if the entry is found.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L51">
+                    <td class="line-num" data-line="51"><a href="#L51">51</a></td>
+                    <td class="line-code"><code><span class="comment">     * </span></code></td>
+                </tr>
+                <tr class="code-row" id="L52">
+                    <td class="line-num" data-line="52"><a href="#L52">52</a></td>
+                    <td class="line-code"><code><span class="comment">     * @param key what key to look for</span></code></td>
+                </tr>
+                <tr class="code-row" id="L53">
+                    <td class="line-num" data-line="53"><a href="#L53">53</a></td>
+                    <td class="line-code"><code><span class="comment">     * @return the value for the key or null if not found</span></code></td>
+                </tr>
+                <tr class="code-row" id="L54">
+                    <td class="line-num" data-line="54"><a href="#L54">54</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L55">
+                    <td class="line-num" data-line="55"><a href="#L55">55</a></td>
+                    <td class="line-code"><code>    <span class="kw">public</span> <span class="type">V</span> get(<span class="kw">final</span> <span class="type">K</span> key);</code></td>
+                </tr>
+                <tr class="code-row" id="L56">
+                    <td class="line-num" data-line="56"><a href="#L56">56</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L57">
+                    <td class="line-num" data-line="57"><a href="#L57">57</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L58">
+                    <td class="line-num" data-line="58"><a href="#L58">58</a></td>
+                    <td class="line-code"><code><span class="comment">     * Associates the specified value with the specified key in this map.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L59">
+                    <td class="line-num" data-line="59"><a href="#L59">59</a></td>
+                    <td class="line-code"><code><span class="comment">     * If the map previously contained a mapping for the key, the old</span></code></td>
+                </tr>
+                <tr class="code-row" id="L60">
+                    <td class="line-num" data-line="60"><a href="#L60">60</a></td>
+                    <td class="line-code"><code><span class="comment">     * value is replaced. Starts eviction if the max size is reached.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L61">
+                    <td class="line-num" data-line="61"><a href="#L61">61</a></td>
+                    <td class="line-code"><code><span class="comment">     *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L62">
+                    <td class="line-num" data-line="62"><a href="#L62">62</a></td>
+                    <td class="line-code"><code><span class="comment">     * @param key key with which the specified value is to be associated</span></code></td>
+                </tr>
+                <tr class="code-row" id="L63">
+                    <td class="line-num" data-line="63"><a href="#L63">63</a></td>
+                    <td class="line-code"><code><span class="comment">     * @param value value to be associated with the specified key</span></code></td>
+                </tr>
+                <tr class="code-row" id="L64">
+                    <td class="line-num" data-line="64"><a href="#L64">64</a></td>
+                    <td class="line-code"><code><span class="comment">     * @return the previous value associated with key, or null if there was no mapping for key.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L65">
+                    <td class="line-num" data-line="65"><a href="#L65">65</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L66">
+                    <td class="line-num" data-line="66"><a href="#L66">66</a></td>
+                    <td class="line-code"><code>    <span class="kw">public</span> <span class="type">V</span> put(<span class="kw">final</span> <span class="type">K</span> key, <span class="kw">final</span> <span class="type">V</span> value);</code></td>
+                </tr>
+                <tr class="code-row" id="L67">
+                    <td class="line-num" data-line="67"><a href="#L67">67</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L68">
+                    <td class="line-num" data-line="68"><a href="#L68">68</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L69">
+                    <td class="line-num" data-line="69"><a href="#L69">69</a></td>
+                    <td class="line-code"><code><span class="comment">     * Removes the mapping for a key from this map if it is present.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L70">
+                    <td class="line-num" data-line="70"><a href="#L70">70</a></td>
+                    <td class="line-code"><code><span class="comment">     *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L71">
+                    <td class="line-num" data-line="71"><a href="#L71">71</a></td>
+                    <td class="line-code"><code><span class="comment">     * @param key key whose mapping is to be removed from the map</span></code></td>
+                </tr>
+                <tr class="code-row" id="L72">
+                    <td class="line-num" data-line="72"><a href="#L72">72</a></td>
+                    <td class="line-code"><code><span class="comment">     * @return the previous value associated with key, or null if there was no mapping for key.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L73">
+                    <td class="line-num" data-line="73"><a href="#L73">73</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L74">
+                    <td class="line-num" data-line="74"><a href="#L74">74</a></td>
+                    <td class="line-code"><code>    <span class="kw">public</span> <span class="type">V</span> remove(<span class="kw">final</span> <span class="type">K</span> key);</code></td>
+                </tr>
+                <tr class="code-row" id="L75">
+                    <td class="line-num" data-line="75"><a href="#L75">75</a></td>
+                    <td class="line-code"><code>    </code></td>
+                </tr>
+                <tr class="code-row" id="L76">
+                    <td class="line-num" data-line="76"><a href="#L76">76</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L77">
+                    <td class="line-num" data-line="77"><a href="#L77">77</a></td>
+                    <td class="line-code"><code><span class="comment">     * Returns the number of key-value mappings.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L78">
+                    <td class="line-num" data-line="78"><a href="#L78">78</a></td>
+                    <td class="line-code"><code><span class="comment">     *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L79">
+                    <td class="line-num" data-line="79"><a href="#L79">79</a></td>
+                    <td class="line-code"><code><span class="comment">     * @return the number of entries</span></code></td>
+                </tr>
+                <tr class="code-row" id="L80">
+                    <td class="line-num" data-line="80"><a href="#L80">80</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L81">
+                    <td class="line-num" data-line="81"><a href="#L81">81</a></td>
+                    <td class="line-code"><code>    <span class="kw">public</span> <span class="kw">int</span> size();</code></td>
+                </tr>
+                <tr class="code-row" id="L82">
+                    <td class="line-num" data-line="82"><a href="#L82">82</a></td>
+                    <td class="line-code"><code>    </code></td>
+                </tr>
+                <tr class="code-row" id="L83">
+                    <td class="line-num" data-line="83"><a href="#L83">83</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L84">
+                    <td class="line-num" data-line="84"><a href="#L84">84</a></td>
+                    <td class="line-code"><code><span class="comment">     * Returns a list of all keys. This does not cause LRU effects.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L85">
+                    <td class="line-num" data-line="85"><a href="#L85">85</a></td>
+                    <td class="line-code"><code><span class="comment">     * This is in order of the internal array but without the free slots. </span></code></td>
+                </tr>
+                <tr class="code-row" id="L86">
+                    <td class="line-num" data-line="86"><a href="#L86">86</a></td>
+                    <td class="line-code"><code><span class="comment">     * Changing the array does not change the internal structure.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L87">
+                    <td class="line-num" data-line="87"><a href="#L87">87</a></td>
+                    <td class="line-code"><code><span class="comment">     *</span></code></td>
+                </tr>
+                <tr class="code-row" id="L88">
+                    <td class="line-num" data-line="88"><a href="#L88">88</a></td>
+                    <td class="line-code"><code><span class="comment">     * @return a list of keys or an empty array if size is 0</span></code></td>
+                </tr>
+                <tr class="code-row" id="L89">
+                    <td class="line-num" data-line="89"><a href="#L89">89</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L90">
+                    <td class="line-num" data-line="90"><a href="#L90">90</a></td>
+                    <td class="line-code"><code>    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">K</span>&gt; keys();</code></td>
+                </tr>
+                <tr class="code-row" id="L91">
+                    <td class="line-num" data-line="91"><a href="#L91">91</a></td>
+                    <td class="line-code"><code></code></td>
+                </tr>
+                <tr class="code-row" id="L92">
+                    <td class="line-num" data-line="92"><a href="#L92">92</a></td>
+                    <td class="line-code"><code>    <span class="comment">/**</span></code></td>
+                </tr>
+                <tr class="code-row" id="L93">
+                    <td class="line-num" data-line="93"><a href="#L93">93</a></td>
+                    <td class="line-code"><code><span class="comment">     * Clears the map, reuses the data structure by clearing it out.</span></code></td>
+                </tr>
+                <tr class="code-row" id="L94">
+                    <td class="line-num" data-line="94"><a href="#L94">94</a></td>
+                    <td class="line-code"><code><span class="comment">     */</span></code></td>
+                </tr>
+                <tr class="code-row" id="L95">
+                    <td class="line-num" data-line="95"><a href="#L95">95</a></td>
+                    <td class="line-code"><code>    <span class="kw">public</span> <span class="kw">void</span> clear();</code></td>
+                </tr>
+                <tr class="code-row" id="L96">
+                    <td class="line-num" data-line="96"><a href="#L96">96</a></td>
+                    <td class="line-code"><code>}</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function updateHighlight() {
+            document.querySelectorAll('.code-row.highlighted').forEach(r => r.classList.remove('highlighted'));
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#L')) {
+                const el = document.getElementById(hash.substring(1));
+                if (el) {
+                    el.classList.add('highlighted');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+        window.addEventListener('hashchange', updateHighlight);
+        window.addEventListener('DOMContentLoaded', updateHighlight);
+
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-theme');
+            const btn = document.getElementById('themeBtn');
+            btn.innerText = isDark ? '☀️ Light' : '🌙 Dark';
+            localStorage.setItem('presentation-theme', isDark ? 'dark' : 'light');
+        }
+        if (localStorage.getItem('presentation-theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            const btn = document.getElementById('themeBtn');
+            if (btn) btn.innerText = '☀️ Light';
+        }
+
+        function copyCode() {
+            const codeText = Array.from(document.querySelectorAll('.line-code')).map(td => td.textContent).join('\n');
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const orig = btn.innerText;
+                btn.innerText = '✅ Copied!';
+                setTimeout(() => btn.innerText = orig, 1800);
+            });
+        }
+    </script>
+</body>
+</html>

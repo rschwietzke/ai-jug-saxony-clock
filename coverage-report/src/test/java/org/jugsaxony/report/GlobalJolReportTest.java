@@ -36,5 +36,15 @@ public class GlobalJolReportTest {
         assertThat(fastHtml).doesNotExist();
         assertThat(xltHtml).doesNotExist();
         assertThat(simpleMathHtml).doesNotExist();
+
+        File demo0LruHtml = new File(outputDir, "sources/demo0/LRUClockMap.html");
+        File demo0LruJava = new File(outputDir, "sources/demo0/LRUClockMap.java");
+        assertThat(demo0LruHtml).exists().isNotEmpty();
+        assertThat(demo0LruJava).exists().isNotEmpty();
+
+        File demo0LruTestHtml = new File(outputDir, "sources/demo0/LRUClockMapTest.html");
+        File demo0LruTestJava = new File(outputDir, "sources/demo0/LRUClockMapTest.java");
+        assertThat(demo0LruTestHtml).exists().isNotEmpty();
+        assertThat(demo0LruTestJava).exists().isNotEmpty();
     }
 }

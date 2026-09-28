@@ -114,6 +114,12 @@ public class GlobalDashboardGenerator {
             ));
         }
 
+        Map<String, String[]> moduleMetadata = new HashMap<>();
+        for (ModuleInfo m : MODULES) {
+            moduleMetadata.put(m.id(), new String[]{m.name(), m.model(), m.storageStrategy()});
+        }
+        SourceViewerGenerator.generateSourceSnapshots(outputDir, rootProjectDir, modDirs, moduleMetadata);
+
         // Write Markdown Dashboard
         writeMarkdownDashboard(new File(outputDir, "README.md"), lruMapSummaries);
         writeMarkdownDashboard(new File(outputDir, "global-dashboard.md"), lruMapSummaries);
@@ -344,8 +350,8 @@ public class GlobalDashboardGenerator {
             out.println();
             out.println("## ⏰ LRUClockMap — Quality, Coverage & Mutation Verification");
             out.println();
-            out.println("| Module | AI Model / Implementation | Storage Strategy | Unit Tests | Instruction Coverage | Line Coverage | Branch Coverage | PIT Mutation Score | Status |");
-            out.println("| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |");
+            out.println("| Module | AI Model / Implementation | Unit Tests | Instruction Coverage | Line Coverage | Branch Coverage | PIT Mutation Score | Status |");
+            out.println("| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |");
 
             for (LruClockMapSummary s : lruMaps) {
                 String pitStr = s.quality().pitTotal() > 0 ? String.format("%.1f%% (%d/%d killed)", s.quality().pitScorePct(), s.quality().pitKilled(), s.quality().pitTotal()) : "N/A";
@@ -354,10 +360,9 @@ public class GlobalDashboardGenerator {
                 int fails = s.quality().failures() + s.quality().errors();
                 String statusStr = fails == 0 && total > 0 ? "100% Passing ✅" : (total == 0 ? "No Tests" : fails + " Failed ❌");
 
-                out.printf("| **%s** | %s | %s | %d%s | %.1f%% (%d/%d) | %.1f%% (%d/%d) | %.1f%% (%d/%d) | %s | %s |%n",
-                        s.id(),
+                out.printf("| %s | %s | %d%s | %.1f%% (%d/%d) | %.1f%% (%d/%d) | %.1f%% (%d/%d) | %s | %s |%n",
+                        renderMarkdownModuleLink(s.id(), "LRUClockMap"),
                         s.aiModel(),
-                        s.storageStrategy(),
                         s.quality().tests(),
                         timeStr,
                         s.quality().instructionCoveragePct(),
@@ -465,6 +470,9 @@ public class GlobalDashboardGenerator {
             out.println("        .speedup-fast { color: #16a34a; font-weight: 700; }");
             out.println("        .speedup-slow { color: #dc2626; }");
             out.println("        .perf-tag { font-size: 0.8rem; padding: 0.15rem 0.4rem; border-radius: 4px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #334155; font-family: 'JetBrains Mono', monospace; }");
+            out.println("        .module-source-link { color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.45rem; border-radius: 6px; background: rgba(2, 132, 199, 0.06); border: 1px solid rgba(2, 132, 199, 0.15); transition: all 0.2s ease; font-weight: 700; }");
+            out.println("        .module-source-link:hover { background: rgba(2, 132, 199, 0.14); border-color: var(--primary); text-decoration: none; transform: translateY(-1px); }");
+            out.println("        .module-source-link .code-icon { font-size: 0.75rem; opacity: 0.75; }");
             out.println("    </style>");
             out.println("</head>");
             out.println("<body>");
@@ -534,7 +542,6 @@ public class GlobalDashboardGenerator {
             out.println("                <tr>");
             out.println("                    <th>Module</th>");
             out.println("                    <th>AI Model / Implementation</th>");
-            out.println("                    <th>Storage Strategy</th>");
             out.println("                    <th>Unit Tests</th>");
             out.println("                    <th>Instruction Coverage</th>");
             out.println("                    <th>Line Coverage</th>");
@@ -596,9 +603,8 @@ public class GlobalDashboardGenerator {
                         : "<span class=\"badge badge-info\">N/A</span>";
 
                 out.println("                <tr>");
-                out.printf("                    <td><strong>%s</strong></td>%n", s.id());
+                out.printf("                    <td>%s</td>%n", renderModuleLink(s.id(), "LRUClockMap"));
                 out.printf("                    <td>%s</td>%n", s.aiModel());
-                out.printf("                    <td><span class=\"badge badge-info\">%s</span></td>%n", s.storageStrategy());
                 out.printf("                    <td>%s</td>%n", testBadge);
                 out.printf("                    <td>%s</td>%n", covInstStr);
                 out.printf("                    <td>%s</td>%n", covLineStr);
@@ -627,6 +633,21 @@ public class GlobalDashboardGenerator {
                 .replace("'", "&#39;");
     }
 
+    private static String renderModuleLink(String modId, String className) {
+        if (className != null && !className.isBlank()) {
+            return String.format("<a href=\"sources/%s/%s.html\" class=\"module-source-link\" title=\"View Source: %s/%s.java\"><strong>%s</strong> <span class=\"code-icon\">📄</span></a>",
+                    modId, className, modId, className, modId);
+        }
+        return String.format("<strong>%s</strong>", modId);
+    }
+
+    private static String renderMarkdownModuleLink(String modId, String className) {
+        if (className != null && !className.isBlank()) {
+            return String.format("[**%s**](sources/%s/%s.html)", modId, modId, className);
+        }
+        return String.format("**%s**", modId);
+    }
+
     private static void renderSurefireSuiteRow(
             PrintWriter out,
             String modId,
@@ -649,7 +670,7 @@ public class GlobalDashboardGenerator {
         }
 
         out.printf("                <tr id=\"%s\">%n", modId);
-        out.printf("                    <td><strong>%s</strong></td>%n", modId);
+        out.printf("                    <td>%s</td>%n", renderModuleLink(modId, "LRUClockMapTest"));
         out.printf("                    <td>%s</td>%n", aiModel);
         out.printf("                    <td><strong>%d</strong></td>%n", total);
         out.printf("                    <td class=\"numeric\">%.2fs</td>%n", time);
@@ -722,6 +743,9 @@ public class GlobalDashboardGenerator {
             out.println("        .badge-info { background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd; }");
             out.println("        .badge-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }");
             out.println("        .numeric { text-align: right; font-variant-numeric: tabular-nums; font-family: 'JetBrains Mono', monospace; }");
+            out.println("        .module-source-link { color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.45rem; border-radius: 6px; background: rgba(2, 132, 199, 0.06); border: 1px solid rgba(2, 132, 199, 0.15); transition: all 0.2s ease; font-weight: 700; }");
+            out.println("        .module-source-link:hover { background: rgba(2, 132, 199, 0.14); border-color: var(--primary); text-decoration: none; transform: translateY(-1px); }");
+            out.println("        .module-source-link .code-icon { font-size: 0.75rem; opacity: 0.75; }");
             out.println("    </style>");
             out.println("</head>");
             out.println("<body>");
